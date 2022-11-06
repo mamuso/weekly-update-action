@@ -1,0 +1,47 @@
+{
+  "name": "actions-discussion-to-markdown",
+  "version": "0.0.1",
+  "private": false,
+  "description": "Grab a GitHub discussion URL and return the contents as markdown",
+  "main": "lib/src/main.js",
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write '**/*.ts'",
+    "format-check": "prettier --check '**/*.ts'",
+    "lint": "eslint src/**/*.ts",
+    "package": "ncc build --source-map --license licenses.txt",
+    "test": "jest",
+    "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mamuso/actions-discussion-to-markdown.git"
+  },
+  "keywords": [
+    "actions",
+    "node",
+    "setup"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@actions/core": "^1.10.0",
+    "@octokit/graphql": "^5.0.4",
+    "@vercel/ncc": "^0.34.0",
+    "add": "^2.0.6",
+    "node-html-markdown": "^1.2.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.2.1",
+    "@types/node": "^18.11.9",
+    "@typescript-eslint/parser": "^5.40.1",
+    "eslint": "^8.26.0",
+    "eslint-plugin-github": "^4.4.0",
+    "eslint-plugin-jest": "^27.1.3",
+    "jest": "^29.2.1",
+    "js-yaml": "^4.1.0",
+    "prettier": "^2.7.1",
+    "ts-jest": "^29.0.3",
+    "typescript": "^4.8.4"
+  }
+}
