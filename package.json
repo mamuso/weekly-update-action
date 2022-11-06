@@ -1,8 +1,8 @@
 {
-  "name": "actions-discussion-to-markdown",
+  "name": "weekly-update-action",
   "version": "0.0.1",
   "private": false,
-  "description": "Grab a GitHub discussion URL and return the contents as markdown",
+  "description": "An action to create a new GitHub discussion to request weekly updates from the team.",
   "main": "lib/src/main.js",
   "scripts": {
     "build": "tsc",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mamuso/actions-discussion-to-markdown.git"
+    "url": "git+https://github.com/mamuso/weekly-update-action.git"
   },
   "keywords": [
     "actions",
@@ -27,9 +27,7 @@
   "dependencies": {
     "@actions/core": "^1.10.0",
     "@octokit/graphql": "^5.0.4",
-    "@vercel/ncc": "^0.34.0",
-    "add": "^2.0.6",
-    "node-html-markdown": "^1.2.2"
+    "@vercel/ncc": "^0.34.0"
   },
   "devDependencies": {
     "@types/jest": "^29.2.1",
