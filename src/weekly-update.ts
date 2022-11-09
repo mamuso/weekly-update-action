@@ -10,9 +10,9 @@ export default class weeklyUpdate {
   configuration: configuration
 
   // Kick off the action
-  constructor() {
+  constructor(userConfiguration: configuration) {
     this.configuration = {
-      set: 'test'
+      set: userConfiguration.set || 'Mon'
     }
   }
 

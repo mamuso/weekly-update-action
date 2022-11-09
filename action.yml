@@ -1,3 +1,12 @@
 name: 'weekly-update-action'
 description: 'An action to create a new GitHub discussion to request weekly updates from the team.'
 author: 'mamuso <mamuso@mamuso.net>'
+inputs:
+  post_on:
+    description: 'Day of the week to post the update request.'
+    default: 'Mon'
+  advance_on:
+    description: 'Day of the week to advance the update request.'
+  remind_on:
+    description: 'Day of the week to remind the team to post the update.'
+    default: 'Thu'
