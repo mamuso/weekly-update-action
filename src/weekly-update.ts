@@ -43,6 +43,24 @@ export default class weeklyUpdate {
           this.configuration.remind_on
         ].includes(this.today)
       ) {
+        // Get next post_on date unless it's the post_on date
+        const shortDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        const postOnDay = shortDays.indexOf(this.configuration.post_on) + 1
+        const postOnDate = new Date()
+        postOnDate.setDate(
+          postOnDate.getDate() + ((postOnDay - postOnDate.getDay() + 7) % 7)
+        )
+        const dateStr = postOnDate.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        })
+
+        // eslint-disable-next-line no-console
+        console.log(this.configuration)
+        // eslint-disable-next-line no-console
+        console.log(`${postOnDay} ${this.configuration.post_on} ${dateStr}`)
+
         switch (this.today) {
           case this.configuration.advance_on:
             // Advance the week

@@ -51,17 +51,17 @@ describe('WeeklyUpdate test suite', () => {
 
   it('should run advance if post_on, advance_on are equal', async () => {
     const configuration: configuration = {
-      post_on: 'Tue',
-      advance_on: 'Tue',
+      post_on: 'Wed',
+      advance_on: 'Wed',
       remind_on: 'Thu'
     }
     const weeklyUpdateAction = new weeklyUpdate(configuration)
     // intercept Today's date
-    weeklyUpdateAction.today = 'Tue'
+    weeklyUpdateAction.today = 'Wed'
 
     weeklyUpdateAction.run()
 
-    expect(weeklyUpdateAction.today).toEqual('Tue')
+    expect(weeklyUpdateAction.today).toEqual('Wed')
     expect(weeklyUpdateAction.route).toEqual('advance')
     expect(weeklyUpdateAction.executedToday).toEqual(true)
   })
