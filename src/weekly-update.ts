@@ -18,12 +18,11 @@ export default class weeklyUpdate {
       post_on: userConfiguration.post_on || 'Mon',
       advance_on: userConfiguration.advance_on || null,
       remind_on: userConfiguration.remind_on || null,
-      title: userConfiguration.title || 'Weekly Update ($DATE)',
+      title: userConfiguration.title || 'Weekly Update ({{date}})',
       post_template:
-        userConfiguration.post_template || './github/weekly-update-request.md',
+        userConfiguration.post_template || '.github/weekly-update-request.md',
       remind_template:
-        userConfiguration.remind_template ||
-        './github/weekly-update-reminder.md'
+        userConfiguration.remind_template || '.github/weekly-update-reminder.md'
     }
     this.route = ''
     this.today = new Date().toLocaleDateString('en-US', {
@@ -50,16 +49,22 @@ export default class weeklyUpdate {
         postOnDate.setDate(
           postOnDate.getDate() + ((postOnDay - postOnDate.getDay() + 7) % 7)
         )
-        const dateStr = postOnDate.toLocaleDateString('en-US', {
+        const postOnDateStr = postOnDate.toLocaleDateString('en-US', {
           year: 'numeric',
           month: 'long',
           day: 'numeric'
         })
 
+        // Update the title with the next post_on date
+        this.configuration.title = this.configuration.title?.replace(
+          '{{date}}',
+          postOnDateStr
+        )
+
         // eslint-disable-next-line no-console
         console.log(this.configuration)
         // eslint-disable-next-line no-console
-        console.log(`${postOnDay} ${this.configuration.post_on} ${dateStr}`)
+        console.log(`${this.configuration.title}`)
 
         switch (this.today) {
           case this.configuration.advance_on:
