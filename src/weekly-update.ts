@@ -17,7 +17,13 @@ export default class weeklyUpdate {
     this.configuration = {
       post_on: userConfiguration.post_on || 'Mon',
       advance_on: userConfiguration.advance_on || null,
-      remind_on: userConfiguration.remind_on || 'Thu'
+      remind_on: userConfiguration.remind_on || null,
+      title: userConfiguration.title || 'Weekly Update ($DATE)',
+      post_template:
+        userConfiguration.post_template || './github/weekly-update-request.md',
+      remind_template:
+        userConfiguration.remind_template ||
+        './github/weekly-update-reminder.md'
     }
     this.route = ''
     this.today = new Date().toLocaleDateString('en-US', {
@@ -37,9 +43,6 @@ export default class weeklyUpdate {
           this.configuration.remind_on
         ].includes(this.today)
       ) {
-        // eslint-disable-next-line no-console
-        console.log(this.today)
-
         switch (this.today) {
           case this.configuration.advance_on:
             // Advance the week

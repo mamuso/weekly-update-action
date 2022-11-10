@@ -9,4 +9,12 @@ inputs:
     description: 'Day of the week to advance the update request.'
   remind_on:
     description: 'Day of the week to remind the team to post the update.'
-    default: 'Thu'
+  title:
+    description: 'Title of the update request.'
+    default: 'Weekly Update ($DATE)'
+  post_template:
+    description: 'Path to the template to use for the update request.'
+    default: './github/weekly-update-request.md'
+  remind_template:
+    description: 'Path to the template to use for the reminder.'
+    default: './github/weekly-update-reminder.md'

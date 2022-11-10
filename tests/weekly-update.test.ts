@@ -28,7 +28,6 @@ describe('WeeklyUpdate test suite', () => {
 
     weeklyUpdateAction.run()
 
-    expect(weeklyUpdateAction.configuration).toEqual(configuration)
     expect(weeklyUpdateAction.today).toEqual('Tue')
     expect(weeklyUpdateAction.executedToday).toEqual(false)
   })
@@ -45,7 +44,6 @@ describe('WeeklyUpdate test suite', () => {
 
     weeklyUpdateAction.run()
 
-    expect(weeklyUpdateAction.configuration).toEqual(configuration)
     expect(weeklyUpdateAction.today).toEqual('Mon')
     expect(weeklyUpdateAction.route).toEqual('post')
     expect(weeklyUpdateAction.executedToday).toEqual(true)
@@ -63,7 +61,6 @@ describe('WeeklyUpdate test suite', () => {
 
     weeklyUpdateAction.run()
 
-    expect(weeklyUpdateAction.configuration).toEqual(configuration)
     expect(weeklyUpdateAction.today).toEqual('Tue')
     expect(weeklyUpdateAction.route).toEqual('advance')
     expect(weeklyUpdateAction.executedToday).toEqual(true)
@@ -81,7 +78,6 @@ describe('WeeklyUpdate test suite', () => {
 
     weeklyUpdateAction.run()
 
-    expect(weeklyUpdateAction.configuration).toEqual(configuration)
     expect(weeklyUpdateAction.today).toEqual('Thu')
     expect(weeklyUpdateAction.route).toEqual('remind')
     expect(weeklyUpdateAction.executedToday).toEqual(true)
