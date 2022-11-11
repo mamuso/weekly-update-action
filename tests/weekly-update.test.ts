@@ -16,7 +16,20 @@ describe('WeeklyUpdate test suite', () => {
     jest.restoreAllMocks()
   })
 
+  it('shoudl fail if no token is provided', async () => {
+    const configuration: configuration = {
+      post_on: 'Mon',
+      advance_on: null,
+      remind_on: 'Thu'
+    }
+    expect(() => {
+      const weeklyUpdateAction = new weeklyUpdate(configuration)
+    }).toThrow('Input required and not supplied: token')
+  })
+
   it('should not run if post_on, advance_on or remind_on are not Today', async () => {
+    process.env['INPUT_TOKEN'] = token
+
     const configuration: configuration = {
       post_on: 'Mon',
       advance_on: null,
@@ -33,6 +46,8 @@ describe('WeeklyUpdate test suite', () => {
   })
 
   it('should run if post_on, advance_on or remind_on are are Today', async () => {
+    process.env['INPUT_TOKEN'] = token
+
     const configuration: configuration = {
       post_on: 'Mon',
       advance_on: null,
@@ -51,6 +66,8 @@ describe('WeeklyUpdate test suite', () => {
   })
 
   it('should run advance if post_on, advance_on are equal', async () => {
+    process.env['INPUT_TOKEN'] = token
+
     const configuration: configuration = {
       post_on: 'Wed',
       advance_on: 'Wed',
@@ -69,6 +86,8 @@ describe('WeeklyUpdate test suite', () => {
   })
 
   it('should run remind if remind_on is Today', async () => {
+    process.env['INPUT_TOKEN'] = token
+
     const configuration: configuration = {
       post_on: 'Tue',
       advance_on: 'Tue',

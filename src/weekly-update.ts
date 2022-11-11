@@ -11,9 +11,12 @@ export default class weeklyUpdate {
   route: string
   today: string
   executedToday: boolean
+  token: string
+  graphqlWithAuth: typeof graphql
 
   // Kick off the action
   constructor(userConfiguration: configuration) {
+    // Set the configuration defaults
     this.configuration = {
       post_on: userConfiguration.post_on || 'Mon',
       advance_on: userConfiguration.advance_on || null,
@@ -24,11 +27,22 @@ export default class weeklyUpdate {
       remind_template:
         userConfiguration.remind_template || '.github/weekly-update-reminder.md'
     }
+
     this.route = ''
     this.today = new Date().toLocaleDateString('en-US', {
       weekday: 'short'
     })
     this.executedToday = false
+
+    // Grab the token
+    this.token = core.getInput('token', {required: true})
+
+    // Initiazlize the GraphQL client
+    this.graphqlWithAuth = graphql.defaults({
+      headers: {
+        authorization: `token ${this.token}`
+      }
+    })
   }
 
   // Trigger the action
@@ -61,8 +75,6 @@ export default class weeklyUpdate {
           postOnDateStr
         )
 
-        // eslint-disable-next-line no-console
-        console.log(this.configuration)
         // eslint-disable-next-line no-console
         console.log(`${this.configuration.title}`)
 

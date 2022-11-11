@@ -18,3 +18,6 @@ inputs:
   remind_template:
     description: 'Path to the template to use for the reminder.'
     default: './github/weekly-update-reminder.md'
+  token:
+    required: true
+    description: 'Token to authenticate with GitHub'
