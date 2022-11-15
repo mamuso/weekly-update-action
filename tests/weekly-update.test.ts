@@ -3,11 +3,13 @@ import fs from 'fs'
 import path from 'path'
 // import {mockDiscussion, mockDiscussionNotFound} from './mocks'
 import weeklyUpdate from '../src/weekly-update'
-import {GraphQlQueryResponseData} from '@octokit/graphql'
+import {getDiscussionPostMock} from './mocks'
+import type {GraphQlQueryResponseData} from '@octokit/graphql'
 import type {configuration} from '../src/types'
 
 // Constants
-const token: string = 'abcdefg123456'
+const token: string = process.env.PAT || '123456'
+console.log(token)
 
 describe('WeeklyUpdate test suite', () => {
   beforeEach(async () => {})
@@ -71,13 +73,14 @@ describe('WeeklyUpdate test suite', () => {
     const configuration: configuration = {
       post_on: 'Wed',
       advance_on: 'Wed',
-      remind_on: 'Thu'
+      remind_on: 'Thu',
+      repo: 'mamuso/weekly-update-action'
     }
     const weeklyUpdateAction = new weeklyUpdate(configuration)
     // intercept Today's date
     weeklyUpdateAction.today = 'Wed'
 
-    weeklyUpdateAction.run()
+    await weeklyUpdateAction.run()
 
     expect(weeklyUpdateAction.today).toEqual('Wed')
     expect(weeklyUpdateAction.route).toEqual('advance')
@@ -97,7 +100,7 @@ describe('WeeklyUpdate test suite', () => {
     // intercept Today's date
     weeklyUpdateAction.today = 'Thu'
 
-    weeklyUpdateAction.run()
+    await weeklyUpdateAction.run()
 
     expect(weeklyUpdateAction.today).toEqual('Thu')
     expect(weeklyUpdateAction.route).toEqual('remind')

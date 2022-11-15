@@ -13,11 +13,14 @@ export default class weeklyUpdate {
   executedToday: boolean
   token: string
   graphqlWithAuth: typeof graphql
+  repoOwner: string | undefined
+  repoName: string | undefined
 
   // Kick off the action
   constructor(userConfiguration: configuration) {
     // Set the configuration defaults
     this.configuration = {
+      repo: userConfiguration.repo || null,
       post_on: userConfiguration.post_on || 'Mon',
       advance_on: userConfiguration.advance_on || null,
       remind_on: userConfiguration.remind_on || null,
@@ -28,11 +31,22 @@ export default class weeklyUpdate {
         userConfiguration.remind_template || '.github/weekly-update-reminder.md'
     }
 
-    this.route = ''
+    // Toaday date and route initialization
     this.today = new Date().toLocaleDateString('en-US', {
       weekday: 'short'
     })
     this.executedToday = false
+    this.route = ''
+
+    // Set up the repository owner and name
+    if (this.configuration.repo != null) {
+      const repo = this.configuration.repo.split('/')
+      this.repoOwner = repo[0]
+      this.repoName = repo[1]
+    } else {
+      this.repoOwner = process.env.GITHUB_REPOSITORY_OWNER
+      this.repoName = process.env.GITHUB_REPOSITORY_NAME
+    }
 
     // Grab the token
     this.token = core.getInput('token', {required: true})
@@ -56,20 +70,8 @@ export default class weeklyUpdate {
           this.configuration.remind_on
         ].includes(this.today)
       ) {
-        // Get next post_on date unless it's the post_on date
-        const shortDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        const postOnDay = shortDays.indexOf(this.configuration.post_on) + 1
-        const postOnDate = new Date()
-        postOnDate.setDate(
-          postOnDate.getDate() + ((postOnDay - postOnDate.getDay() + 7) % 7)
-        )
-        const postOnDateStr = postOnDate.toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        })
-
         // Update the title with the next post_on date
+        const postOnDateStr = this.getPostDate()
         this.configuration.title = this.configuration.title?.replace(
           '{{date}}',
           postOnDateStr
@@ -79,24 +81,26 @@ export default class weeklyUpdate {
         console.log(`${this.configuration.title}`)
 
         switch (this.today) {
-          case this.configuration.advance_on:
+          case this.configuration.advance_on: {
             // Advance the week
             this.route = 'advance'
-            // eslint-disable-next-line no-console
-            console.log('Advance the week')
+            const discussionId = await this.getDiscussionPost()
             break
-          case this.configuration.post_on:
+          }
+          case this.configuration.post_on: {
             // Post the weekly update
             this.route = 'post'
             // eslint-disable-next-line no-console
             console.log('Post the weekly update')
             break
-          case this.configuration.remind_on:
+          }
+          case this.configuration.remind_on: {
             // Remind the team to post the weekly update
             this.route = 'remind'
             // eslint-disable-next-line no-console
             console.log('Remind the team to post the weekly update')
             break
+          }
         }
 
         // Mark the action as executed today
@@ -108,5 +112,43 @@ export default class weeklyUpdate {
       }
       throw error
     }
+  }
+
+  // Get the next post_on date
+  getPostDate(): string {
+    const shortDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    const postOnDay = shortDays.indexOf(this.configuration.post_on) + 1
+    const postOnDate = new Date()
+    postOnDate.setDate(
+      postOnDate.getDate() + ((postOnDay - postOnDate.getDay() + 7) % 7)
+    )
+    return postOnDate.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
+  }
+
+  // Check if discussion exists
+  async getDiscussionPost(): Promise<number> {
+    const query = `
+      query {
+        repository(owner: "${this.repoOwner}", name: "${this.repoName}") {
+          discussions(last: 100) {
+            nodes {
+              number
+              title
+            }
+          }
+        }
+      }
+    `
+    const response: GraphQlQueryResponseData = await this.graphqlWithAuth(query)
+    // eslint-disable-next-line no-console
+    console.log(response.repository.discussions.nodes)
+    return response.repository.discussions.nodes.find(
+      (discussion: {title: string}) =>
+        discussion.title === this.configuration.title
+    )?.number
   }
 }

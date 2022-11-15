@@ -5,4 +5,5 @@ export interface configuration {
   title?: string
   post_template?: string
   remind_template?: string
+  repo?: string | null
 }
