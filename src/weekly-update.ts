@@ -86,6 +86,9 @@ export default class weeklyUpdate {
             // Advance the week
             this.route = 'advance'
             const discussionId = await this.getDiscussionPost()
+            if (discussionId) {
+              return
+            }
             break
           }
           case this.configuration.post_on: {
@@ -118,7 +121,7 @@ export default class weeklyUpdate {
   // Get the next post_on date
   getPostDate(): string {
     const shortDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-    const postOnDay = shortDays.indexOf(this.configuration.post_on) + 1
+    const postOnDay = shortDays.indexOf(`${this.configuration.post_on}`) + 1
     const postOnDate = new Date()
     postOnDate.setDate(
       postOnDate.getDate() + ((postOnDay - postOnDate.getDay() + 7) % 7)
