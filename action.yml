@@ -1,3 +1,31 @@
 name: 'weekly-update-action'
 description: 'An action to create a new GitHub discussion to request weekly updates from the team.'
 author: 'mamuso <mamuso@mamuso.net>'
+inputs:
+  repo:
+    description: 'The repository to create the discussion in.'
+  post_on:
+    description: 'Day of the week to post the update request.'
+    default: 'Mon'
+  advance_on:
+    description: 'Day of the week to advance the update request.'
+  remind_on:
+    description: 'Day of the week to remind the team to post the update.'
+  title:
+    description: 'Title of the update request.'
+    default: 'Weekly Update ({{date}})'
+  post_template:
+    description: 'Path to the template to use for the update request.'
+    default: '.github/weekly-update-request.md'
+  remind_template:
+    description: 'Path to the template to use for the reminder.'
+    default: '.github/weekly-update-reminder.md'
+  category:
+    description: 'Discussion category to post the update request in.'
+    default: 'General'
+  token:
+    required: true
+    description: 'Token to authenticate with GitHub'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
