@@ -17,18 +17,19 @@ export default class weeklyUpdate {
   repoName: string | undefined
 
   // Kick off the action
-  constructor(userConfiguration: configuration) {
+  constructor(actionConfiguration: configuration) {
     // Set the configuration defaults
     this.configuration = {
-      repo: userConfiguration.repo || null,
-      post_on: userConfiguration.post_on || 'Mon',
-      advance_on: userConfiguration.advance_on || null,
-      remind_on: userConfiguration.remind_on || null,
-      title: userConfiguration.title || 'Weekly Update ({{date}})',
+      repo: actionConfiguration.repo || null,
+      post_on: actionConfiguration.post_on || 'Mon',
+      advance_on: actionConfiguration.advance_on || null,
+      remind_on: actionConfiguration.remind_on || null,
+      title: actionConfiguration.title || 'Weekly Update ({{date}})',
       post_template:
-        userConfiguration.post_template || '.github/weekly-update-request.md',
+        actionConfiguration.post_template || '.github/weekly-update-request.md',
       remind_template:
-        userConfiguration.remind_template || '.github/weekly-update-reminder.md'
+        actionConfiguration.remind_template ||
+        '.github/weekly-update-reminder.md'
     }
 
     // Toaday date and route initialization
@@ -144,8 +145,6 @@ export default class weeklyUpdate {
       }
     `
     const response: GraphQlQueryResponseData = await this.graphqlWithAuth(query)
-    // eslint-disable-next-line no-console
-    console.log(response.repository.discussions.nodes)
     return response.repository.discussions.nodes.find(
       (discussion: {title: string}) =>
         discussion.title === this.configuration.title
