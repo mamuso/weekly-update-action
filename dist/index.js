@@ -6,19 +6,43 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const weekly_update_1 = __importDefault(__nccwpck_require__(1307));
+const core = __importStar(__nccwpck_require__(2186));
 const actionConfiguration = {
-    post_on: process.env.post_on,
-    advance_on: process.env.advance_on,
-    remind_on: process.env.remind_on,
-    title: process.env.title,
-    post_template: process.env.post_template,
-    remind_template: process.env.remind_template,
-    repo: process.env.repo
+    post_on: core.getInput('post_on'),
+    advance_on: core.getInput('advance_on'),
+    remind_on: core.getInput('remind_on'),
+    title: core.getInput('title'),
+    post_template: core.getInput('post_template'),
+    remind_template: core.getInput('remind_template'),
+    repo: core.getInput('repo')
 };
 const weekly = new weekly_update_1.default(actionConfiguration);
 weekly.run();
@@ -69,8 +93,11 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 //
 const core = __importStar(__nccwpck_require__(2186));
 const graphql_1 = __nccwpck_require__(8467);
+const fs = __importStar(__nccwpck_require__(7147));
 class weeklyUpdate {
-    // Kick off the action
+    // ----------------------------------------------------
+    //  Kick off the action
+    // ----------------------------------------------------
     constructor(actionConfiguration) {
         // Set the configuration defaults
         this.configuration = {
@@ -83,6 +110,9 @@ class weeklyUpdate {
             remind_template: actionConfiguration.remind_template ||
                 '.github/weekly-update-reminder.md'
         };
+        // ----------------------------------------------------
+        //  Read and transform the templates
+        // ----------------------------------------------------
         // Toaday date and route initialization
         this.today = new Date().toLocaleDateString('en-US', {
             weekday: 'short'
@@ -122,8 +152,16 @@ class weeklyUpdate {
                     // Update the title with the next post_on date
                     const postOnDateStr = this.getPostDate();
                     this.configuration.title = (_a = this.configuration.title) === null || _a === void 0 ? void 0 : _a.replace('{{date}}', postOnDateStr);
-                    // eslint-disable-next-line no-console
-                    console.log(`${this.configuration.title}`);
+                    // Read post template
+                    let postTemplate = this.readTemplateFile(this.configuration.post_template);
+                    if (postTemplate) {
+                        postTemplate = postTemplate.replace('{{date}}', postOnDateStr);
+                    }
+                    // Read post template
+                    let remindTemplate = this.readTemplateFile(this.configuration.remind_template);
+                    if (remindTemplate) {
+                        remindTemplate = remindTemplate.replace('{{date}}', postOnDateStr);
+                    }
                     switch (this.today) {
                         case this.configuration.advance_on: {
                             // Advance the week
@@ -138,7 +176,7 @@ class weeklyUpdate {
                             // Post the weekly update
                             this.route = 'post';
                             // eslint-disable-next-line no-console
-                            console.log('Post the weekly update');
+                            console.log(`Post the weekly update – ${postTemplate}`);
                             break;
                         }
                         case this.configuration.remind_on: {
@@ -172,6 +210,13 @@ class weeklyUpdate {
             month: 'long',
             day: 'numeric'
         });
+    }
+    // Read template file
+    readTemplateFile(template) {
+        if (template) {
+            return fs.readFileSync(template, 'utf8');
+        }
+        return null;
     }
     // Check if discussion exists
     getDiscussionPost() {

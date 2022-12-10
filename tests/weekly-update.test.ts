@@ -47,7 +47,7 @@ describe('WeeklyUpdate test suite', () => {
     expect(weeklyUpdateAction.executedToday).toEqual(false)
   })
 
-  it('should run if post_on, advance_on or remind_on are are Today', async () => {
+  it('should run if post_on, advance_on or remind_on are Today', async () => {
     process.env['INPUT_TOKEN'] = token
 
     const configuration: configuration = {
@@ -62,8 +62,8 @@ describe('WeeklyUpdate test suite', () => {
     weeklyUpdateAction.run()
 
     expect(weeklyUpdateAction.today).toEqual('Mon')
-    expect(weeklyUpdateAction.route).toEqual('post')
     expect(weeklyUpdateAction.configuration.title).not.toContain('{{date}}')
+    expect(weeklyUpdateAction.route).toEqual('post')
     expect(weeklyUpdateAction.executedToday).toEqual(true)
   })
 

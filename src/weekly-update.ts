@@ -5,6 +5,7 @@ import * as core from '@actions/core'
 import {graphql} from '@octokit/graphql'
 import type {GraphQlQueryResponseData} from '@octokit/graphql'
 import type {configuration} from './types'
+import * as fs from 'fs'
 
 export default class weeklyUpdate {
   configuration: configuration
@@ -16,7 +17,9 @@ export default class weeklyUpdate {
   repoOwner: string | undefined
   repoName: string | undefined
 
-  // Kick off the action
+  // ----------------------------------------------------
+  //  Kick off the action
+  // ----------------------------------------------------
   constructor(actionConfiguration: configuration) {
     // Set the configuration defaults
     this.configuration = {
@@ -31,6 +34,10 @@ export default class weeklyUpdate {
         actionConfiguration.remind_template ||
         '.github/weekly-update-reminder.md'
     }
+
+    // ----------------------------------------------------
+    //  Read and transform the templates
+    // ----------------------------------------------------
 
     // Toaday date and route initialization
     this.today = new Date().toLocaleDateString('en-US', {
@@ -78,8 +85,21 @@ export default class weeklyUpdate {
           postOnDateStr
         )
 
-        // eslint-disable-next-line no-console
-        console.log(`${this.configuration.title}`)
+        // Read post template
+        let postTemplate = this.readTemplateFile(
+          this.configuration.post_template
+        )
+        if (postTemplate) {
+          postTemplate = postTemplate.replace('{{date}}', postOnDateStr)
+        }
+
+        // Read post template
+        let remindTemplate = this.readTemplateFile(
+          this.configuration.remind_template
+        )
+        if (remindTemplate) {
+          remindTemplate = remindTemplate.replace('{{date}}', postOnDateStr)
+        }
 
         switch (this.today) {
           case this.configuration.advance_on: {
@@ -95,7 +115,7 @@ export default class weeklyUpdate {
             // Post the weekly update
             this.route = 'post'
             // eslint-disable-next-line no-console
-            console.log('Post the weekly update')
+            console.log(`Post the weekly update – ${postTemplate}`)
             break
           }
           case this.configuration.remind_on: {
@@ -131,6 +151,14 @@ export default class weeklyUpdate {
       month: 'long',
       day: 'numeric'
     })
+  }
+
+  // Read template file
+  readTemplateFile(template: string | undefined): string | null {
+    if (template) {
+      return fs.readFileSync(template, 'utf8')
+    }
+    return null
   }
 
   // Check if discussion exists
