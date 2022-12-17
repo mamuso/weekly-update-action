@@ -9,7 +9,6 @@ import type {configuration} from '../src/types'
 
 // Constants
 const token: string = process.env.PAT || '123456'
-console.log(token)
 
 describe('WeeklyUpdate test suite', () => {
   beforeEach(async () => {})

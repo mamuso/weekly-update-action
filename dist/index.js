@@ -131,6 +131,8 @@ class weeklyUpdate {
         }
         // Grab the token
         this.token = core.getInput('token', { required: true });
+        // eslint-disable-next-line no-console
+        console.log(this.token);
         // Initiazlize the GraphQL client
         this.graphqlWithAuth = graphql_1.graphql.defaults({
             headers: {
