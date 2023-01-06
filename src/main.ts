@@ -9,7 +9,8 @@ const actionConfig: config = {
   remind_on: core.getInput('remind_on'),
   title: core.getInput('title'),
   post_template: core.getInput('post_template'),
-  remind_template: core.getInput('remind_template')
+  remind_template: core.getInput('remind_template'),
+  category: core.getInput('category')
 }
 const weekly = new WeeklyUpdate(actionConfig)
 weekly.run()
