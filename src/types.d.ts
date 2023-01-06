@@ -1,4 +1,4 @@
-export interface configuration {
+export interface config {
   post_on?: string
   advance_on?: string | null
   remind_on?: string | null
@@ -6,4 +6,5 @@ export interface configuration {
   post_template?: string
   remind_template?: string
   repo?: string | null
+  category?: string
 }

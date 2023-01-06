@@ -1,26 +1,229 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 6816:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+/**
+ * Default configuration for the action
+ *
+ * This will merge with the user's configuration upon instantation of the implementation
+ */
+class defaultConfig {
+    constructor() {
+        this.config = {
+            repo: null,
+            post_on: 'Mon',
+            advance_on: null,
+            remind_on: null,
+            title: 'Weekly Update ({{date}})',
+            post_template: '.github/weekly-update-request.md',
+            remind_template: '.github/weekly-update-reminder.md',
+            category: 'General'
+        };
+    }
+}
+exports["default"] = defaultConfig;
+
+
+/***/ }),
+
+/***/ 5865:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const graphql_1 = __nccwpck_require__(8467);
+class GitHub {
+    constructor(token) {
+        this.connection = graphql_1.graphql.defaults({
+            headers: {
+                authorization: `token ${token}`
+            }
+        });
+    }
+    /**
+     * Get repository id
+     * @returns {Promise<string>} Repository id
+     */
+    getRepoId(repoOwner, repoName) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const query = `
+    query {
+      repository(owner: "${repoOwner}", name: "${repoName}") {
+        id
+      }
+    }
+  `;
+            const response = yield this.connection(query);
+            return response.repository.id;
+        });
+    }
+    /**
+     * Find discussion by title
+     * @returns {Promise<number | null>} Discussion number
+     */
+    findDiscussionNumberByTitle(repoOwner, repoName, title) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            if (title) {
+                const query = `
+      query {
+        repository(owner: "${repoOwner}", name: "${repoName}") {
+          discussions(last: 100) {
+            nodes {
+              id
+              number
+              title
+            }
+          }
+        }
+      }
+    `;
+                const response = yield this.connection(query);
+                return (_a = response.repository.discussions.nodes.find((discussion) => discussion.title === title)) === null || _a === void 0 ? void 0 : _a.id;
+            }
+            else {
+                return null;
+            }
+        });
+    }
+    /**
+     * Get discussion category id
+     * @returns {Promise<number | null>} Category id
+     */
+    getDiscussionCategoryId(repoOwner, repoName, category) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            if (category) {
+                const query = `
+      query {
+        repository(owner: "${repoOwner}", name: "${repoName}") {
+          discussionCategories(last: 100) {
+            nodes {
+              id
+              name
+            }
+          }
+        }
+      }
+    `;
+                const response = yield this.connection(query);
+                return (_a = response.repository.discussionCategories.nodes.find((categoryNode) => categoryNode.name === category)) === null || _a === void 0 ? void 0 : _a.id;
+            }
+            else {
+                return null;
+            }
+        });
+    }
+    /**
+     * Create discussion
+     * @returns {Promise<void>}
+     */
+    createDiscussion(repoOwner, repoName, title, body, categoryId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (title && body && categoryId) {
+                const repoId = yield this.getRepoId(repoOwner, repoName);
+                const query = `
+      mutation {
+        createDiscussion(input: {
+            repositoryId: "${repoId}", title: "${title}", body: "${body}", categoryId: "${categoryId}"
+          }) {
+          discussion {
+            number
+          }
+        }
+      }
+    `;
+                yield this.connection(query);
+            }
+        });
+    }
+    /**
+     * Create discussion comment
+     * @returns {Promise<void>}
+     */
+    createDiscussionComment(discussionId, body) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (discussionId && body) {
+                const query = `
+      mutation {
+        addDiscussionComment(input: {
+            discussionId: "${discussionId}", body: "${body}"
+          }) {
+          comment {
+            id
+          }
+        }
+      }
+    `;
+                yield this.connection(query);
+            }
+        });
+    }
+}
+exports["default"] = GitHub;
+
+
+/***/ }),
+
 /***/ 9536:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const weekly_update_1 = __importDefault(__nccwpck_require__(1307));
-const actionConfiguration = {
-    post_on: process.env.post_on,
-    advance_on: process.env.advance_on,
-    remind_on: process.env.remind_on,
-    title: process.env.title,
-    post_template: process.env.post_template,
-    remind_template: process.env.remind_template,
-    repo: process.env.repo
+const core = __importStar(__nccwpck_require__(2186));
+const actionConfig = {
+    post_on: core.getInput('post_on'),
+    advance_on: core.getInput('advance_on'),
+    remind_on: core.getInput('remind_on'),
+    title: core.getInput('title'),
+    post_template: core.getInput('post_template'),
+    remind_template: core.getInput('remind_template'),
+    repo: core.getInput('repo')
 };
-const weekly = new weekly_update_1.default(actionConfiguration);
+const weekly = new weekly_update_1.default(actionConfig);
 weekly.run();
 
 
@@ -63,94 +266,84 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-//
-//  weekly-update.ts
-//
 const core = __importStar(__nccwpck_require__(2186));
-const graphql_1 = __nccwpck_require__(8467);
-class weeklyUpdate {
-    // Kick off the action
-    constructor(actionConfiguration) {
-        // Set the configuration defaults
-        this.configuration = {
-            repo: actionConfiguration.repo || null,
-            post_on: actionConfiguration.post_on || 'Mon',
-            advance_on: actionConfiguration.advance_on || null,
-            remind_on: actionConfiguration.remind_on || null,
-            title: actionConfiguration.title || 'Weekly Update ({{date}})',
-            post_template: actionConfiguration.post_template || '.github/weekly-update-request.md',
-            remind_template: actionConfiguration.remind_template ||
-                '.github/weekly-update-reminder.md'
-        };
-        // Toaday date and route initialization
+const fs = __importStar(__nccwpck_require__(7147));
+const github_1 = __importDefault(__nccwpck_require__(5865));
+const config_1 = __importDefault(__nccwpck_require__(6816));
+class WeeklyUpdate {
+    constructor(actionConfig) {
+        var _a;
+        /**
+         * Merge the default configuration with the user's configuration
+         */
+        this.config = new config_1.default().config;
+        Object.assign(this.config, actionConfig);
+        this.token = core.getInput('token', { required: true });
+        this.github = new github_1.default(this.token);
+        this.route = ''; // post, advance, remind
         this.today = new Date().toLocaleDateString('en-US', {
             weekday: 'short'
         });
         this.executedToday = false;
-        this.route = '';
-        // Set up the repository owner and name
-        if (this.configuration.repo != null) {
-            const repo = this.configuration.repo.split('/');
+        if (this.config.repo != null) {
+            const repo = this.config.repo.split('/');
             this.repoOwner = repo[0];
             this.repoName = repo[1];
         }
         else {
-            this.repoOwner = process.env.GITHUB_REPOSITORY_OWNER;
-            this.repoName = process.env.GITHUB_REPOSITORY_NAME;
+            this.repoOwner = `${process.env.GITHUB_REPOSITORY_OWNER}`;
+            this.repoName = `${(_a = process.env.GITHUB_REPOSITORY) === null || _a === void 0 ? void 0 : _a.split('/')[1]}`;
         }
-        // Grab the token
-        this.token = core.getInput('token', { required: true });
-        // Initiazlize the GraphQL client
-        this.graphqlWithAuth = graphql_1.graphql.defaults({
-            headers: {
-                authorization: `token ${this.token}`
-            }
-        });
     }
-    // Trigger the action
     run() {
-        var _a;
+        var _a, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                // Check if the action should be executed today
-                if ([
-                    this.configuration.advance_on,
-                    this.configuration.post_on,
-                    this.configuration.remind_on
-                ].includes(this.today)) {
-                    // Update the title with the next post_on date
+                const shouldRunToday = [this.config.advance_on, this.config.post_on, this.config.remind_on].includes(this.today);
+                if (shouldRunToday) {
                     const postOnDateStr = this.getPostDate();
-                    this.configuration.title = (_a = this.configuration.title) === null || _a === void 0 ? void 0 : _a.replace('{{date}}', postOnDateStr);
-                    // eslint-disable-next-line no-console
-                    console.log(`${this.configuration.title}`);
+                    /**
+                     * Process the title and templates
+                     */
+                    this.config.title = (_a = this.config.title) === null || _a === void 0 ? void 0 : _a.replace('{{date}}', postOnDateStr);
+                    this.postTemplate = (_b = this.readTemplateFile(this.config.post_template)) === null || _b === void 0 ? void 0 : _b.replace('{{date}}', postOnDateStr);
+                    this.remindTemplate = (_c = this.readTemplateFile(this.config.remind_template)) === null || _c === void 0 ? void 0 : _c.replace('{{date}}', postOnDateStr);
+                    /**
+                     * Determine the route that the action needs to take based on the day of the week and the configuration. The route will be one of the following:
+                     * - post: Post the weekly update
+                     * - advance: Advance the week
+                     * - remind: Remind the team to post the weekly update
+                     */
                     switch (this.today) {
-                        case this.configuration.advance_on: {
-                            // Advance the week
+                        /**
+                         * Post the weekly update discussion ahead of the post_on date
+                         */
+                        case this.config.advance_on: {
                             this.route = 'advance';
-                            const discussionId = yield this.getDiscussionPost();
-                            if (discussionId) {
-                                return;
-                            }
+                            yield this.postDiscussion();
                             break;
                         }
-                        case this.configuration.post_on: {
-                            // Post the weekly update
+                        /**
+                         * Post the weekly update on the post_on date if it doesn't already exist
+                         */
+                        case this.config.post_on: {
                             this.route = 'post';
-                            // eslint-disable-next-line no-console
-                            console.log('Post the weekly update');
+                            yield this.postDiscussion();
                             break;
                         }
-                        case this.configuration.remind_on: {
-                            // Remind the team to post the weekly update
+                        /**
+                         * Post a reminder as a reply to the weekly update on the remind_on date
+                         */
+                        case this.config.remind_on: {
                             this.route = 'remind';
-                            // eslint-disable-next-line no-console
-                            console.log('Remind the team to post the weekly update');
+                            yield this.postReminder();
                             break;
                         }
                     }
-                    // Mark the action as executed today
-                    this.executedToday = true;
                 }
             }
             catch (error) {
@@ -161,10 +354,51 @@ class weeklyUpdate {
             }
         });
     }
-    // Get the next post_on date
+    postDiscussion() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const discussionId = yield this.getDiscussionId();
+            if (!discussionId) {
+                const categoryId = yield this.getCategoryId();
+                // eslint-disable-next-line no-console
+                console.log(categoryId);
+                if (categoryId) {
+                    yield this.github.createDiscussion(this.repoOwner, this.repoName, this.config.title, this.postTemplate, categoryId);
+                }
+                else {
+                    throw new Error(`Category ${this.config.category} not found`);
+                }
+            }
+            this.executedToday = true;
+        });
+    }
+    postReminder() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const discussionId = yield this.getDiscussionId();
+            if (discussionId) {
+                yield this.github.createDiscussionComment(discussionId, this.remindTemplate);
+            }
+            this.executedToday = true;
+        });
+    }
+    getDiscussionId() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const discussionId = yield this.github.findDiscussionNumberByTitle(this.repoOwner, this.repoName, this.config.title);
+            return discussionId;
+        });
+    }
+    getCategoryId() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const categoryId = yield this.github.getDiscussionCategoryId(this.repoOwner, this.repoName, this.config.category);
+            return categoryId;
+        });
+    }
+    /**
+     *
+     * @returns {string} The date of the next post_on date
+     */
     getPostDate() {
         const shortDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-        const postOnDay = shortDays.indexOf(`${this.configuration.post_on}`) + 1;
+        const postOnDay = shortDays.indexOf(`${this.config.post_on}`) + 1;
         const postOnDate = new Date();
         postOnDate.setDate(postOnDate.getDate() + ((postOnDay - postOnDate.getDay() + 7) % 7));
         return postOnDate.toLocaleDateString('en-US', {
@@ -173,28 +407,19 @@ class weeklyUpdate {
             day: 'numeric'
         });
     }
-    // Check if discussion exists
-    getDiscussionPost() {
-        var _a;
-        return __awaiter(this, void 0, void 0, function* () {
-            const query = `
-      query {
-        repository(owner: "${this.repoOwner}", name: "${this.repoName}") {
-          discussions(last: 100) {
-            nodes {
-              number
-              title
-            }
-          }
+    /**
+     *
+     * @param {string | undefined} template The path to the template file
+     * @returns {string | null} The contents of the template file
+     */
+    readTemplateFile(template) {
+        if (template) {
+            return fs.readFileSync(template, 'utf8');
         }
-      }
-    `;
-            const response = yield this.graphqlWithAuth(query);
-            return (_a = response.repository.discussions.nodes.find((discussion) => discussion.title === this.configuration.title)) === null || _a === void 0 ? void 0 : _a.number;
-        });
+        return null;
     }
 }
-exports["default"] = weeklyUpdate;
+exports["default"] = WeeklyUpdate;
 
 
 /***/ }),
