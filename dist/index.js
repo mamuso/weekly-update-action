@@ -215,13 +215,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const weekly_update_1 = __importDefault(__nccwpck_require__(1307));
 const core = __importStar(__nccwpck_require__(2186));
 const actionConfig = {
+    repo: core.getInput('repo'),
     post_on: core.getInput('post_on'),
     advance_on: core.getInput('advance_on'),
     remind_on: core.getInput('remind_on'),
     title: core.getInput('title'),
     post_template: core.getInput('post_template'),
-    remind_template: core.getInput('remind_template'),
-    repo: core.getInput('repo')
+    remind_template: core.getInput('remind_template')
 };
 const weekly = new weekly_update_1.default(actionConfig);
 weekly.run();
