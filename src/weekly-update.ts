@@ -22,6 +22,8 @@ export default class WeeklyUpdate {
      */
     this.config = new DefaultConfig().config
     Object.assign(this.config, actionConfig)
+    // eslint-disable-next-line no-console
+    console.log(`Config: ${this.config}`)
 
     this.token = core.getInput('token', {required: true})
     this.github = new GitHub(this.token)

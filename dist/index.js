@@ -281,6 +281,8 @@ class WeeklyUpdate {
          */
         this.config = new config_1.default().config;
         Object.assign(this.config, actionConfig);
+        // eslint-disable-next-line no-console
+        console.log(`Config: ${this.config}`);
         this.token = core.getInput('token', { required: true });
         this.github = new github_1.default(this.token);
         this.route = ''; // post, advance, remind
