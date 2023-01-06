@@ -45,7 +45,8 @@
       "semi": "off",
       "@typescript-eslint/semi": ["error", "never"],
       "@typescript-eslint/type-annotation-spacing": "error",
-      "@typescript-eslint/unbound-method": "error"
+      "@typescript-eslint/unbound-method": "error",
+      "max-len": ["error", {"code": 120, "ignoreComments": true}]
     },
     "env": {
       "node": true,
