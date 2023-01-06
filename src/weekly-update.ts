@@ -1,4 +1,3 @@
-import process from 'process'
 import * as core from '@actions/core'
 import * as fs from 'fs'
 import GitHub from './github'
@@ -39,8 +38,7 @@ export default class WeeklyUpdate {
       this.repoOwner = repo[0]
       this.repoName = repo[1]
     } else {
-      this.repoOwner = `${process.env.GITHUB_REPOSITORY_OWNER}`
-      this.repoName = `${process.env.GITHUB_REPOSITORY?.split('/')[1]}`
+      throw new Error('Repository not specified')
     }
   }
 

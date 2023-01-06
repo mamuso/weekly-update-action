@@ -270,14 +270,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const process_1 = __importDefault(__nccwpck_require__(7282));
 const core = __importStar(__nccwpck_require__(2186));
 const fs = __importStar(__nccwpck_require__(7147));
 const github_1 = __importDefault(__nccwpck_require__(5865));
 const config_1 = __importDefault(__nccwpck_require__(6816));
 class WeeklyUpdate {
     constructor(actionConfig) {
-        var _a;
         /**
          * Merge the default configuration with the user's configuration
          */
@@ -296,8 +294,7 @@ class WeeklyUpdate {
             this.repoName = repo[1];
         }
         else {
-            this.repoOwner = `${process_1.default.env.GITHUB_REPOSITORY_OWNER}`;
-            this.repoName = `${(_a = process_1.default.env.GITHUB_REPOSITORY) === null || _a === void 0 ? void 0 : _a.split('/')[1]}`;
+            throw new Error('Repository not specified');
         }
     }
     run() {
@@ -8020,14 +8017,6 @@ module.exports = require("os");
 
 "use strict";
 module.exports = require("path");
-
-/***/ }),
-
-/***/ 7282:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("process");
 
 /***/ }),
 
