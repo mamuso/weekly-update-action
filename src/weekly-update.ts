@@ -13,6 +13,7 @@ export default class WeeklyUpdate {
   repoOwner: string
   repoName: string
   postTemplate: string | undefined
+  remindTitle: string | undefined
   remindTemplate: string | undefined
   github: GitHub
 
@@ -22,8 +23,6 @@ export default class WeeklyUpdate {
      */
     this.config = new DefaultConfig().config
     Object.assign(this.config, actionConfig)
-    // eslint-disable-next-line no-console
-    console.log(this.config)
 
     this.token = core.getInput('token', {required: true})
     this.github = new GitHub(this.token)
@@ -49,13 +48,18 @@ export default class WeeklyUpdate {
       const shouldRunToday = [this.config.advance_on, this.config.post_on, this.config.remind_on].includes(this.today)
       if (shouldRunToday) {
         const postOnDateStr = this.getPostDate()
+        const previousPostOnDateStr = this.getPostDate(-7)
 
         /**
          * Process the title and templates
          */
+        this.remindTitle = this.config.title?.replace('{{date}}', previousPostOnDateStr)
         this.config.title = this.config.title?.replace('{{date}}', postOnDateStr)
         this.postTemplate = this.readTemplateFile(this.config.post_template)?.replace('{{date}}', postOnDateStr)
-        this.remindTemplate = this.readTemplateFile(this.config.remind_template)?.replace('{{date}}', postOnDateStr)
+        this.remindTemplate = this.readTemplateFile(this.config.remind_template)?.replace(
+          '{{date}}',
+          previousPostOnDateStr
+        )
 
         /**
          * Determine the route that the action needs to take based on the day of the week and the configuration. The route will be one of the following:
@@ -118,18 +122,18 @@ export default class WeeklyUpdate {
   }
 
   async postReminder(): Promise<void> {
-    const discussionId: number | null = await this.getDiscussionId()
+    const discussionId: number | null = await this.getDiscussionId(this.remindTitle)
     if (discussionId) {
       await this.github.createDiscussionComment(discussionId, this.remindTemplate)
     }
     this.executedToday = true
   }
 
-  async getDiscussionId(): Promise<number | null> {
+  async getDiscussionId(title = this.config.title): Promise<number | null> {
     const discussionId: number | null = await this.github.findDiscussionNumberByTitle(
       this.repoOwner,
       this.repoName,
-      this.config.title
+      title
     )
     return discussionId
   }
@@ -147,11 +151,11 @@ export default class WeeklyUpdate {
    *
    * @returns {string} The date of the next post_on date
    */
-  getPostDate(): string {
+  getPostDate(offset = 0): string {
     const shortDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
     const postOnDay = shortDays.indexOf(`${this.config.post_on}`) + 1
     const postOnDate = new Date()
-    postOnDate.setDate(postOnDate.getDate() + ((postOnDay - postOnDate.getDay() + 7) % 7))
+    postOnDate.setDate(postOnDate.getDate() + ((postOnDay - postOnDate.getDay() + 7) % 7) + offset)
     return postOnDate.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
