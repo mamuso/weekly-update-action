@@ -101,8 +101,6 @@ export default class WeeklyUpdate {
     const discussionId: number | null = await this.getDiscussionId()
     if (!discussionId) {
       const categoryId: number | null = await this.getCategoryId()
-      // eslint-disable-next-line no-console
-      console.log(categoryId)
       if (categoryId) {
         await this.github.createDiscussion(
           this.repoOwner,
