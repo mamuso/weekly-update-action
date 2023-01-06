@@ -1,5 +1,5 @@
 name: 'weekly-update-action'
-description: 'An action to create a new GitHub discussion to request weekly updates from the team.'
+description: 'An action to create a weekly GitHub discussion.'
 author: 'mamuso <mamuso@mamuso.net>'
 inputs:
   repo:

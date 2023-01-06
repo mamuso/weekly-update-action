@@ -1,8 +1,8 @@
-import weeklyUpdate from './weekly-update'
+import WeeklyUpdate from './weekly-update'
 import * as core from '@actions/core'
-import type {configuration} from './types'
+import type {config} from './types'
 
-const actionConfiguration: configuration = {
+const actionConfig: config = {
   post_on: core.getInput('post_on'),
   advance_on: core.getInput('advance_on'),
   remind_on: core.getInput('remind_on'),
@@ -11,5 +11,5 @@ const actionConfiguration: configuration = {
   remind_template: core.getInput('remind_template'),
   repo: core.getInput('repo')
 }
-const weekly = new weeklyUpdate(actionConfiguration)
+const weekly = new WeeklyUpdate(actionConfig)
 weekly.run()
