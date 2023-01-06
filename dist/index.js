@@ -215,13 +215,13 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const weekly_update_1 = __importDefault(__nccwpck_require__(1307));
 const core = __importStar(__nccwpck_require__(2186));
 const actionConfig = {
+    repo: core.getInput('repo'),
     post_on: core.getInput('post_on'),
     advance_on: core.getInput('advance_on'),
     remind_on: core.getInput('remind_on'),
     title: core.getInput('title'),
     post_template: core.getInput('post_template'),
-    remind_template: core.getInput('remind_template'),
-    repo: core.getInput('repo')
+    remind_template: core.getInput('remind_template')
 };
 const weekly = new weekly_update_1.default(actionConfig);
 weekly.run();
@@ -298,18 +298,20 @@ class WeeklyUpdate {
         }
     }
     run() {
-        var _a, _b, _c;
+        var _a, _b, _c, _d;
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const shouldRunToday = [this.config.advance_on, this.config.post_on, this.config.remind_on].includes(this.today);
                 if (shouldRunToday) {
                     const postOnDateStr = this.getPostDate();
+                    const previousPostOnDateStr = this.getPostDate(-7);
                     /**
                      * Process the title and templates
                      */
-                    this.config.title = (_a = this.config.title) === null || _a === void 0 ? void 0 : _a.replace('{{date}}', postOnDateStr);
-                    this.postTemplate = (_b = this.readTemplateFile(this.config.post_template)) === null || _b === void 0 ? void 0 : _b.replace('{{date}}', postOnDateStr);
-                    this.remindTemplate = (_c = this.readTemplateFile(this.config.remind_template)) === null || _c === void 0 ? void 0 : _c.replace('{{date}}', postOnDateStr);
+                    this.remindTitle = (_a = this.config.title) === null || _a === void 0 ? void 0 : _a.replace('{{date}}', previousPostOnDateStr);
+                    this.config.title = (_b = this.config.title) === null || _b === void 0 ? void 0 : _b.replace('{{date}}', postOnDateStr);
+                    this.postTemplate = (_c = this.readTemplateFile(this.config.post_template)) === null || _c === void 0 ? void 0 : _c.replace('{{date}}', postOnDateStr);
+                    this.remindTemplate = (_d = this.readTemplateFile(this.config.remind_template)) === null || _d === void 0 ? void 0 : _d.replace('{{date}}', previousPostOnDateStr);
                     /**
                      * Determine the route that the action needs to take based on the day of the week and the configuration. The route will be one of the following:
                      * - post: Post the weekly update
@@ -369,16 +371,16 @@ class WeeklyUpdate {
     }
     postReminder() {
         return __awaiter(this, void 0, void 0, function* () {
-            const discussionId = yield this.getDiscussionId();
+            const discussionId = yield this.getDiscussionId(this.remindTitle);
             if (discussionId) {
                 yield this.github.createDiscussionComment(discussionId, this.remindTemplate);
             }
             this.executedToday = true;
         });
     }
-    getDiscussionId() {
+    getDiscussionId(title = this.config.title) {
         return __awaiter(this, void 0, void 0, function* () {
-            const discussionId = yield this.github.findDiscussionNumberByTitle(this.repoOwner, this.repoName, this.config.title);
+            const discussionId = yield this.github.findDiscussionNumberByTitle(this.repoOwner, this.repoName, title);
             return discussionId;
         });
     }
@@ -392,11 +394,11 @@ class WeeklyUpdate {
      *
      * @returns {string} The date of the next post_on date
      */
-    getPostDate() {
+    getPostDate(offset = 0) {
         const shortDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
         const postOnDay = shortDays.indexOf(`${this.config.post_on}`) + 1;
         const postOnDate = new Date();
-        postOnDate.setDate(postOnDate.getDate() + ((postOnDay - postOnDate.getDay() + 7) % 7));
+        postOnDate.setDate(postOnDate.getDate() + ((postOnDay - postOnDate.getDay() + 7) % 7) + offset);
         return postOnDate.toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
