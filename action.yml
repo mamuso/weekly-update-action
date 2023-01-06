@@ -4,7 +4,7 @@ author: 'mamuso <mamuso@mamuso.net>'
 inputs:
   repo:
     description: 'The repository to create the discussion in.'
-    default: ${{ github.GITHUB_REPOSITORY }}
+    default: ${{ github.repository }}
   post_on:
     description: 'Day of the week to post the update request.'
     default: 'Mon'
