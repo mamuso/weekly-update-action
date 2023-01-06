@@ -270,6 +270,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+const process_1 = __importDefault(__nccwpck_require__(7282));
 const core = __importStar(__nccwpck_require__(2186));
 const fs = __importStar(__nccwpck_require__(7147));
 const github_1 = __importDefault(__nccwpck_require__(5865));
@@ -295,8 +296,8 @@ class WeeklyUpdate {
             this.repoName = repo[1];
         }
         else {
-            this.repoOwner = `${process.env.GITHUB_REPOSITORY_OWNER}`;
-            this.repoName = `${(_a = process.env.GITHUB_REPOSITORY) === null || _a === void 0 ? void 0 : _a.split('/')[1]}`;
+            this.repoOwner = `${process_1.default.env.GITHUB_REPOSITORY_OWNER}`;
+            this.repoName = `${(_a = process_1.default.env.GITHUB_REPOSITORY) === null || _a === void 0 ? void 0 : _a.split('/')[1]}`;
         }
     }
     run() {
@@ -359,8 +360,6 @@ class WeeklyUpdate {
             const discussionId = yield this.getDiscussionId();
             if (!discussionId) {
                 const categoryId = yield this.getCategoryId();
-                // eslint-disable-next-line no-console
-                console.log(categoryId);
                 if (categoryId) {
                     yield this.github.createDiscussion(this.repoOwner, this.repoName, this.config.title, this.postTemplate, categoryId);
                 }
@@ -8021,6 +8020,14 @@ module.exports = require("os");
 
 "use strict";
 module.exports = require("path");
+
+/***/ }),
+
+/***/ 7282:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("process");
 
 /***/ }),
 

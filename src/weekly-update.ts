@@ -1,3 +1,4 @@
+import process from 'process'
 import * as core from '@actions/core'
 import * as fs from 'fs'
 import GitHub from './github'
