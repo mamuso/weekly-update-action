@@ -289,6 +289,8 @@ class WeeklyUpdate {
         });
         this.executedToday = false;
         if (this.config.repo != null) {
+            // eslint-disable-next-line no-console
+            console.log(`Repository: ${this.config.repo}`);
             const repo = this.config.repo.split('/');
             this.repoOwner = repo[0];
             this.repoName = repo[1];
