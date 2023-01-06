@@ -20,8 +20,8 @@ class defaultConfig {
             advance_on: null,
             remind_on: null,
             title: 'Weekly Update ({{date}})',
-            post_template: '.github/weekly-update-request.md',
-            remind_template: '.github/weekly-update-reminder.md',
+            post_template: '.github/weekly-post.md',
+            remind_template: '.github/weekly-reminder.md',
             category: 'General'
         };
     }
