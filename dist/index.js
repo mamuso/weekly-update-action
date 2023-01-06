@@ -282,7 +282,7 @@ class WeeklyUpdate {
         this.config = new config_1.default().config;
         Object.assign(this.config, actionConfig);
         // eslint-disable-next-line no-console
-        console.log(`Config: ${this.config}`);
+        console.log(this.config);
         this.token = core.getInput('token', { required: true });
         this.github = new github_1.default(this.token);
         this.route = ''; // post, advance, remind
@@ -291,8 +291,6 @@ class WeeklyUpdate {
         });
         this.executedToday = false;
         if (this.config.repo != null) {
-            // eslint-disable-next-line no-console
-            console.log(`Repository: ${this.config.repo}`);
             const repo = this.config.repo.split('/');
             this.repoOwner = repo[0];
             this.repoName = repo[1];
