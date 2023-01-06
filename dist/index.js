@@ -411,7 +411,7 @@ class WeeklyUpdate {
      * @returns {string | null} The contents of the template file
      */
     readTemplateFile(template) {
-        if (template) {
+        if (template && fs.existsSync(template)) {
             return fs.readFileSync(template, 'utf8');
         }
         return null;

@@ -169,7 +169,7 @@ export default class WeeklyUpdate {
    * @returns {string | null} The contents of the template file
    */
   readTemplateFile(template: string | undefined): string | null {
-    if (template) {
+    if (template && fs.existsSync(template)) {
       return fs.readFileSync(template, 'utf8')
     }
     return null
