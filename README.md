@@ -42,4 +42,4 @@ You will also need to create two markdown files in your repository:
 - `.github/weekly-post.md` - this will be the template for the discussion post
 - `.github/weekly-reminder.md` - this will be the template for the reminder reply to the post
 
-![Running a weekly 'standup' discussion](https://user-images.githubusercontent.com/3992/211125969-80b2f944-c895-4b2c-a06d-f19a4bc7ecff.png)
+![Running a weekly 'standup' discussion](https://user-images.githubusercontent.com/3992/211126146-c37121c8-856d-414d-96e4-1929da7edbdf.png)
