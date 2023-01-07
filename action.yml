@@ -17,10 +17,10 @@ inputs:
     default: 'Weekly Update ({{date}})'
   post_template:
     description: 'Path to the template to use for the update request.'
-    default: '.github/weekly-update-request.md'
+    default: '.github/weekly-post.md'
   remind_template:
     description: 'Path to the template to use for the reminder.'
-    default: '.github/weekly-update-reminder.md'
+    default: '.github/weekly-reminder.md'
   category:
     description: 'Discussion category to post the update request in.'
     default: 'General'
