@@ -2,6 +2,18 @@
 
 This action will create a new GitHub discussion to request weekly updates from the team.
 
+These are the configurable options:
+
+- `post_on` - the day of the week to create the discussion (default: `Mon`)
+- `remind_on` - the day of the week to remind folks to update their progress (default: empty)
+- `advance_on` - the day of the week to create the discussion a few days ahead of the post day (default: empty)
+- `title` - the title of the discussion (default: `Weekly Update ({{date}})`)
+- `category` - the category of the discussion (default: `General`)
+- `repo` - the repository to create the discussion in (default: empty`)
+- `token` - the GitHub token or PAT that you want to use (default: empty)
+- `post_template` - the name of the markdown file to use as the template for the discussion post (default: `.github/weekly-post.md`)
+- `reminder_template` - the name of the markdown file to use as the template for the reminder reply to the post (default: `.github/weekly-reminder.md`)
+
 ## Use cases
 
 ### Running a weekly 'standup' discussion
