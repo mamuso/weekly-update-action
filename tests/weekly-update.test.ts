@@ -1,13 +1,9 @@
 import * as process from 'process'
-import fs from 'fs'
-import path from 'path'
 import weeklyUpdate from '../src/weekly-update'
-import {getDiscussionPostMock} from './mocks'
-import type {GraphQlQueryResponseData} from '@octokit/graphql'
 import type {config} from '../src/types'
 
 // Constants
-const token: string = process.env.GITHUB_TOKEN
+const token: string | undefined = process.env.GITHUB_TOKEN
 
 describe('WeeklyUpdate test suite', () => {
   beforeEach(async () => {})
