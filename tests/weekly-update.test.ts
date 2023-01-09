@@ -7,7 +7,7 @@ import type {GraphQlQueryResponseData} from '@octokit/graphql'
 import type {config} from '../src/types'
 
 // Constants
-const token: string = process.env.PAT || process.env.GITHUB_TOKEN
+const token: string = process.env.GITHUB_TOKEN
 
 describe('WeeklyUpdate test suite', () => {
   beforeEach(async () => {})
