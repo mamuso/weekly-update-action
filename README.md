@@ -1,5 +1,7 @@
 # Weekly Update Action
 
+[![Build and Test](https://github.com/mamuso/weekly-update-action/actions/workflows/test.yml/badge.svg)](https://github.com/mamuso/weekly-update-action/actions/workflows/test.yml)
+
 This action will create a new GitHub discussion to request weekly updates from the team.
 
 These are the configurable options:
