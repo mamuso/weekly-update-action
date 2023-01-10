@@ -49,16 +49,28 @@ export default class WeeklyUpdate {
       if (shouldRunToday) {
         const postOnDateStr = this.getPostDate()
         const previousPostOnDateStr = this.getPostDate(-7)
+        const shortPostOnDateStr = this.getShortPostDate()
+        const shortPreviousPostOnDateStr = this.getShortPostDate(-7)
 
         /**
          * Process the title and templates
          */
         this.remindTitle = this.config.title?.replace('{{date}}', previousPostOnDateStr)
+        this.remindTitle = this.config.title?.replace('{{shortdate}}', shortPostOnDateStr)
         this.config.title = this.config.title?.replace('{{date}}', postOnDateStr)
+        this.config.title = this.config.title?.replace('{{shortdate}}', shortPostOnDateStr)
         this.postTemplate = this.readTemplateFile(this.config.post_template)?.replace('{{date}}', postOnDateStr)
+        this.postTemplate = this.readTemplateFile(this.config.post_template)?.replace(
+          '{{shortdate}}',
+          shortPostOnDateStr
+        )
         this.remindTemplate = this.readTemplateFile(this.config.remind_template)?.replace(
           '{{date}}',
-          previousPostOnDateStr
+          shortPreviousPostOnDateStr
+        )
+        this.remindTemplate = this.readTemplateFile(this.config.remind_template)?.replace(
+          '{{shortdate}}',
+          shortPreviousPostOnDateStr
         )
 
         /**
@@ -149,7 +161,7 @@ export default class WeeklyUpdate {
 
   /**
    *
-   * @returns {string} The date of the next post_on date
+   * @returns {string} The full date of the next post_on date
    */
   getPostDate(offset = 0): string {
     const shortDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
@@ -160,6 +172,21 @@ export default class WeeklyUpdate {
       year: 'numeric',
       month: 'long',
       day: 'numeric'
+    })
+  }
+
+  /**
+   *
+   * @returns {string} The month and year date of the next post_on date
+   */
+  getShortPostDate(offset = 0): string {
+    const shortDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    const postOnDay = shortDays.indexOf(`${this.config.post_on}`) + 1
+    const postOnDate = new Date()
+    postOnDate.setDate(postOnDate.getDate() + ((postOnDay - postOnDate.getDay() + 7) % 7) + offset)
+    return postOnDate.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long'
     })
   }
 
