@@ -16,6 +16,11 @@ These are the configurable options:
 - `post_template` - the name of the markdown file to use as the template for the discussion post (default: `.github/weekly-post.md`)
 - `reminder_template` - the name of the markdown file to use as the template for the reminder reply to the post (default: `.github/weekly-reminder.md`)
 
+The action looks for discussions by title. You can use the `date` or `shortdate` variable in the title and templates, and the action will process and replace it:
+
+- `Team update - Week of {{date}}` will transform into `Team update - Week of January 2, 2023`.
+- `Team update - {{shortdate}}` will transform into `Team update - January 2023`.
+
 ## Use cases
 
 ### Running a weekly 'standup' discussion

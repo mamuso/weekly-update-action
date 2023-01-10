@@ -299,20 +299,26 @@ class WeeklyUpdate {
         }
     }
     run() {
-        var _a, _b, _c, _d;
+        var _a, _b, _c, _d, _e, _f, _g, _h;
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const shouldRunToday = [this.config.advance_on, this.config.post_on, this.config.remind_on].includes(this.today);
                 if (shouldRunToday) {
                     const postOnDateStr = this.getPostDate();
                     const previousPostOnDateStr = this.getPostDate(-7);
+                    const shortPostOnDateStr = this.getShortPostDate();
+                    const shortPreviousPostOnDateStr = this.getShortPostDate(-7);
                     /**
                      * Process the title and templates
                      */
                     this.remindTitle = (_a = this.config.title) === null || _a === void 0 ? void 0 : _a.replace('{{date}}', previousPostOnDateStr);
-                    this.config.title = (_b = this.config.title) === null || _b === void 0 ? void 0 : _b.replace('{{date}}', postOnDateStr);
-                    this.postTemplate = (_c = this.readTemplateFile(this.config.post_template)) === null || _c === void 0 ? void 0 : _c.replace('{{date}}', postOnDateStr);
-                    this.remindTemplate = (_d = this.readTemplateFile(this.config.remind_template)) === null || _d === void 0 ? void 0 : _d.replace('{{date}}', previousPostOnDateStr);
+                    this.remindTitle = (_b = this.config.title) === null || _b === void 0 ? void 0 : _b.replace('{{shortdate}}', shortPostOnDateStr);
+                    this.config.title = (_c = this.config.title) === null || _c === void 0 ? void 0 : _c.replace('{{date}}', postOnDateStr);
+                    this.config.title = (_d = this.config.title) === null || _d === void 0 ? void 0 : _d.replace('{{shortdate}}', shortPostOnDateStr);
+                    this.postTemplate = (_e = this.readTemplateFile(this.config.post_template)) === null || _e === void 0 ? void 0 : _e.replace('{{date}}', postOnDateStr);
+                    this.postTemplate = (_f = this.readTemplateFile(this.config.post_template)) === null || _f === void 0 ? void 0 : _f.replace('{{shortdate}}', shortPostOnDateStr);
+                    this.remindTemplate = (_g = this.readTemplateFile(this.config.remind_template)) === null || _g === void 0 ? void 0 : _g.replace('{{date}}', shortPreviousPostOnDateStr);
+                    this.remindTemplate = (_h = this.readTemplateFile(this.config.remind_template)) === null || _h === void 0 ? void 0 : _h.replace('{{shortdate}}', shortPreviousPostOnDateStr);
                     /**
                      * Determine the route that the action needs to take based on the day of the week and the configuration. The route will be one of the following:
                      * - post: Post the weekly update
@@ -393,7 +399,7 @@ class WeeklyUpdate {
     }
     /**
      *
-     * @returns {string} The date of the next post_on date
+     * @returns {string} The full date of the next post_on date
      */
     getPostDate(offset = 0) {
         const shortDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -404,6 +410,20 @@ class WeeklyUpdate {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
+        });
+    }
+    /**
+     *
+     * @returns {string} The month and year date of the next post_on date
+     */
+    getShortPostDate(offset = 0) {
+        const shortDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+        const postOnDay = shortDays.indexOf(`${this.config.post_on}`) + 1;
+        const postOnDate = new Date();
+        postOnDate.setDate(postOnDate.getDate() + ((postOnDay - postOnDate.getDay() + 7) % 7) + offset);
+        return postOnDate.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long'
         });
     }
     /**
