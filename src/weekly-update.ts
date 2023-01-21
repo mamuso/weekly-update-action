@@ -66,6 +66,8 @@ export default class WeeklyUpdate {
           shortPostOnDateStr
         )
         this.postTemplate = encode(this.postTemplate)
+        // eslint-disable-next-line no-console
+        console.log(this.postTemplate)
         this.remindTemplate = this.readTemplateFile(this.config.remind_template)?.replace(
           '{{date}}',
           shortPreviousPostOnDateStr
