@@ -303,6 +303,10 @@ class WeeklyUpdate {
         var _a, _b, _c, _d, _e, _f, _g, _h;
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                // eslint-disable-next-line no-console
+                console.log(JSON.stringify(this.config, null, 2));
+                // eslint-disable-next-line no-console
+                console.log(this.today);
                 const shouldRunToday = [this.config.advance_on, this.config.post_on, this.config.remind_on].includes(this.today);
                 if (shouldRunToday) {
                     const postOnDateStr = this.getPostDate();
@@ -322,8 +326,6 @@ class WeeklyUpdate {
                     this.remindTemplate = (_g = this.readTemplateFile(this.config.remind_template)) === null || _g === void 0 ? void 0 : _g.replace('{{date}}', shortPreviousPostOnDateStr);
                     this.remindTemplate = (_h = this.readTemplateFile(this.config.remind_template)) === null || _h === void 0 ? void 0 : _h.replace('{{shortdate}}', shortPreviousPostOnDateStr);
                     this.remindTemplate = (0, html_entities_1.encode)(this.remindTemplate);
-                    // eslint-disable-next-line no-console
-                    console.log(JSON.stringify(this.config, null, 2));
                     // eslint-disable-next-line no-console
                     console.log(postOnDateStr);
                     // eslint-disable-next-line no-console

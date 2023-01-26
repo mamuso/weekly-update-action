@@ -46,6 +46,11 @@ export default class WeeklyUpdate {
 
   async run(): Promise<void> {
     try {
+      // eslint-disable-next-line no-console
+      console.log(JSON.stringify(this.config, null, 2))
+      // eslint-disable-next-line no-console
+      console.log(this.today)
+
       const shouldRunToday = [this.config.advance_on, this.config.post_on, this.config.remind_on].includes(this.today)
       if (shouldRunToday) {
         const postOnDateStr = this.getPostDate()
@@ -76,8 +81,6 @@ export default class WeeklyUpdate {
         )
         this.remindTemplate = encode(this.remindTemplate)
 
-        // eslint-disable-next-line no-console
-        console.log(JSON.stringify(this.config, null, 2))
         // eslint-disable-next-line no-console
         console.log(postOnDateStr)
         // eslint-disable-next-line no-console
