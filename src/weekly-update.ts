@@ -66,8 +66,6 @@ export default class WeeklyUpdate {
           shortPostOnDateStr
         )
         this.postTemplate = encode(this.postTemplate)
-        // eslint-disable-next-line no-console
-        console.log(this.postTemplate)
         this.remindTemplate = this.readTemplateFile(this.config.remind_template)?.replace(
           '{{date}}',
           shortPreviousPostOnDateStr
@@ -77,6 +75,23 @@ export default class WeeklyUpdate {
           shortPreviousPostOnDateStr
         )
         this.remindTemplate = encode(this.remindTemplate)
+
+        // eslint-disable-next-line no-console
+        console.log(JSON.stringify(this.config, null, 2))
+        // eslint-disable-next-line no-console
+        console.log(postOnDateStr)
+        // eslint-disable-next-line no-console
+        console.log(previousPostOnDateStr)
+        // eslint-disable-next-line no-console
+        console.log(shortPostOnDateStr)
+        // eslint-disable-next-line no-console
+        console.log(shortPreviousPostOnDateStr)
+        // eslint-disable-next-line no-console
+        console.log(this.remindTitle)
+        // eslint-disable-next-line no-console
+        console.log(this.postTemplate)
+        // eslint-disable-next-line no-console
+        console.log(this.remindTemplate)
 
         /**
          * Determine the route that the action needs to take based on the day of the week and the configuration. The route will be one of the following:
