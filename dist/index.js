@@ -94,6 +94,8 @@ class GitHub {
       }
     `;
                 const response = yield this.connection(query);
+                // eslint-disable-next-line no-console
+                console.log(JSON.stringify(response, null, 2));
                 return (_a = response.repository.discussions.nodes.find((discussion) => discussion.title === title)) === null || _a === void 0 ? void 0 : _a.id;
             }
             else {
@@ -397,7 +399,7 @@ class WeeklyUpdate {
         return __awaiter(this, void 0, void 0, function* () {
             const discussionId = yield this.getDiscussionId(this.remindTitle);
             // eslint-disable-next-line no-console
-            console.log(discussionId);
+            console.log(`discussionId => ${discussionId}`);
             if (discussionId) {
                 yield this.github.createDiscussionComment(discussionId, this.remindTemplate);
             }

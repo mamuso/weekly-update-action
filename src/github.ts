@@ -51,6 +51,8 @@ export default class GitHub {
       }
     `
       const response: GraphQlQueryResponseData = await this.connection(query)
+      // eslint-disable-next-line no-console
+      console.log(JSON.stringify(response, null, 2))
       return response.repository.discussions.nodes.find((discussion: {title: string}) => discussion.title === title)?.id
     } else {
       return null

@@ -155,7 +155,7 @@ export default class WeeklyUpdate {
   async postReminder(): Promise<void> {
     const discussionId: number | null = await this.getDiscussionId(this.remindTitle)
     // eslint-disable-next-line no-console
-    console.log(discussionId)
+    console.log(`discussionId => ${discussionId}`)
     if (discussionId) {
       await this.github.createDiscussionComment(discussionId, this.remindTemplate)
     }
