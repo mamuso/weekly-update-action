@@ -94,8 +94,6 @@ class GitHub {
       }
     `;
                 const response = yield this.connection(query);
-                // eslint-disable-next-line no-console
-                console.log(JSON.stringify(response, null, 2));
                 return (_a = response.repository.discussions.nodes.find((discussion) => discussion.title === title)) === null || _a === void 0 ? void 0 : _a.id;
             }
             else {
@@ -305,10 +303,6 @@ class WeeklyUpdate {
         var _a, _b, _c, _d, _e, _f, _g, _h;
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                // eslint-disable-next-line no-console
-                console.log(JSON.stringify(this.config, null, 2));
-                // eslint-disable-next-line no-console
-                console.log(this.today);
                 const shouldRunToday = [this.config.advance_on, this.config.post_on, this.config.remind_on].includes(this.today);
                 if (shouldRunToday) {
                     const postOnDateStr = this.getPostDate();
@@ -328,16 +322,6 @@ class WeeklyUpdate {
                     this.remindTemplate = (_g = this.readTemplateFile(this.config.remind_template)) === null || _g === void 0 ? void 0 : _g.replace('{{date}}', shortPreviousPostOnDateStr);
                     this.remindTemplate = (_h = this.readTemplateFile(this.config.remind_template)) === null || _h === void 0 ? void 0 : _h.replace('{{shortdate}}', shortPreviousPostOnDateStr);
                     this.remindTemplate = (0, html_entities_1.encode)(this.remindTemplate);
-                    // eslint-disable-next-line no-console
-                    console.log(postOnDateStr);
-                    // eslint-disable-next-line no-console
-                    console.log(previousPostOnDateStr);
-                    // eslint-disable-next-line no-console
-                    console.log(shortPostOnDateStr);
-                    // eslint-disable-next-line no-console
-                    console.log(shortPreviousPostOnDateStr);
-                    // eslint-disable-next-line no-console
-                    console.log(`remindTitle => ${this.remindTitle}`);
                     /**
                      * Determine the route that the action needs to take based on the day of the week and the configuration. The route will be one of the following:
                      * - post: Post the weekly update
@@ -398,8 +382,6 @@ class WeeklyUpdate {
     postReminder() {
         return __awaiter(this, void 0, void 0, function* () {
             const discussionId = yield this.getDiscussionId(this.remindTitle);
-            // eslint-disable-next-line no-console
-            console.log(`discussionId => ${discussionId}`);
             if (discussionId) {
                 yield this.github.createDiscussionComment(discussionId, this.remindTemplate);
             }
@@ -408,8 +390,6 @@ class WeeklyUpdate {
     }
     getDiscussionId(title = this.config.title) {
         return __awaiter(this, void 0, void 0, function* () {
-            // eslint-disable-next-line no-console
-            console.log(title);
             const discussionId = yield this.github.findDiscussionNumberByTitle(this.repoOwner, this.repoName, title);
             return discussionId;
         });

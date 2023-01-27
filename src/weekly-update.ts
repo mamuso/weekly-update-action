@@ -46,11 +46,6 @@ export default class WeeklyUpdate {
 
   async run(): Promise<void> {
     try {
-      // eslint-disable-next-line no-console
-      console.log(JSON.stringify(this.config, null, 2))
-      // eslint-disable-next-line no-console
-      console.log(this.today)
-
       const shouldRunToday = [this.config.advance_on, this.config.post_on, this.config.remind_on].includes(this.today)
       if (shouldRunToday) {
         const postOnDateStr = this.getPostDate()
@@ -80,17 +75,6 @@ export default class WeeklyUpdate {
           shortPreviousPostOnDateStr
         )
         this.remindTemplate = encode(this.remindTemplate)
-
-        // eslint-disable-next-line no-console
-        console.log(postOnDateStr)
-        // eslint-disable-next-line no-console
-        console.log(previousPostOnDateStr)
-        // eslint-disable-next-line no-console
-        console.log(shortPostOnDateStr)
-        // eslint-disable-next-line no-console
-        console.log(shortPreviousPostOnDateStr)
-        // eslint-disable-next-line no-console
-        console.log(`remindTitle => ${this.remindTitle}`)
 
         /**
          * Determine the route that the action needs to take based on the day of the week and the configuration. The route will be one of the following:
@@ -154,8 +138,6 @@ export default class WeeklyUpdate {
 
   async postReminder(): Promise<void> {
     const discussionId: number | null = await this.getDiscussionId(this.remindTitle)
-    // eslint-disable-next-line no-console
-    console.log(`discussionId => ${discussionId}`)
     if (discussionId) {
       await this.github.createDiscussionComment(discussionId, this.remindTemplate)
     }
@@ -163,8 +145,6 @@ export default class WeeklyUpdate {
   }
 
   async getDiscussionId(title = this.config.title): Promise<number | null> {
-    // eslint-disable-next-line no-console
-    console.log(title)
     const discussionId: number | null = await this.github.findDiscussionNumberByTitle(
       this.repoOwner,
       this.repoName,
