@@ -62,7 +62,7 @@ export default class WeeklyUpdate {
          * Process the title and templates
          */
         this.remindTitle = this.config.title?.replace('{{date}}', previousPostOnDateStr)
-        this.remindTitle = this.config.title?.replace('{{shortdate}}', shortPostOnDateStr)
+        this.remindTitle = this.remindTitle?.replace('{{shortdate}}', shortPostOnDateStr)
         this.config.title = this.config.title?.replace('{{date}}', postOnDateStr)
         this.config.title = this.config.title?.replace('{{shortdate}}', shortPostOnDateStr)
         this.postTemplate = this.readTemplateFile(this.config.post_template)?.replace('{{date}}', postOnDateStr)
@@ -90,11 +90,7 @@ export default class WeeklyUpdate {
         // eslint-disable-next-line no-console
         console.log(shortPreviousPostOnDateStr)
         // eslint-disable-next-line no-console
-        console.log(this.remindTitle)
-        // eslint-disable-next-line no-console
-        console.log(this.postTemplate)
-        // eslint-disable-next-line no-console
-        console.log(this.remindTemplate)
+        console.log(`remindTitle => ${this.remindTitle}`)
 
         /**
          * Determine the route that the action needs to take based on the day of the week and the configuration. The route will be one of the following:

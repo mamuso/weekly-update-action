@@ -317,7 +317,7 @@ class WeeklyUpdate {
                      * Process the title and templates
                      */
                     this.remindTitle = (_a = this.config.title) === null || _a === void 0 ? void 0 : _a.replace('{{date}}', previousPostOnDateStr);
-                    this.remindTitle = (_b = this.config.title) === null || _b === void 0 ? void 0 : _b.replace('{{shortdate}}', shortPostOnDateStr);
+                    this.remindTitle = (_b = this.remindTitle) === null || _b === void 0 ? void 0 : _b.replace('{{shortdate}}', shortPostOnDateStr);
                     this.config.title = (_c = this.config.title) === null || _c === void 0 ? void 0 : _c.replace('{{date}}', postOnDateStr);
                     this.config.title = (_d = this.config.title) === null || _d === void 0 ? void 0 : _d.replace('{{shortdate}}', shortPostOnDateStr);
                     this.postTemplate = (_e = this.readTemplateFile(this.config.post_template)) === null || _e === void 0 ? void 0 : _e.replace('{{date}}', postOnDateStr);
@@ -335,11 +335,7 @@ class WeeklyUpdate {
                     // eslint-disable-next-line no-console
                     console.log(shortPreviousPostOnDateStr);
                     // eslint-disable-next-line no-console
-                    console.log(this.remindTitle);
-                    // eslint-disable-next-line no-console
-                    console.log(this.postTemplate);
-                    // eslint-disable-next-line no-console
-                    console.log(this.remindTemplate);
+                    console.log(`remindTitle => ${this.remindTitle}`);
                     /**
                      * Determine the route that the action needs to take based on the day of the week and the configuration. The route will be one of the following:
                      * - post: Post the weekly update
