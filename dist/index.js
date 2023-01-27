@@ -83,7 +83,7 @@ class GitHub {
                 const query = `
       query {
         repository(owner: "${repoOwner}", name: "${repoName}") {
-          discussions(last: 100) {
+          discussions(first: 100) {
             nodes {
               id
               number
@@ -114,7 +114,7 @@ class GitHub {
                 const query = `
       query {
         repository(owner: "${repoOwner}", name: "${repoName}") {
-          discussionCategories(last: 100) {
+          discussionCategories(first: 100) {
             nodes {
               id
               name
