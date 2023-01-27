@@ -158,6 +158,8 @@ export default class WeeklyUpdate {
 
   async postReminder(): Promise<void> {
     const discussionId: number | null = await this.getDiscussionId(this.remindTitle)
+    // eslint-disable-next-line no-console
+    console.log(discussionId)
     if (discussionId) {
       await this.github.createDiscussionComment(discussionId, this.remindTemplate)
     }
@@ -165,6 +167,8 @@ export default class WeeklyUpdate {
   }
 
   async getDiscussionId(title = this.config.title): Promise<number | null> {
+    // eslint-disable-next-line no-console
+    console.log(title)
     const discussionId: number | null = await this.github.findDiscussionNumberByTitle(
       this.repoOwner,
       this.repoName,

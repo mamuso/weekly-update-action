@@ -400,6 +400,8 @@ class WeeklyUpdate {
     postReminder() {
         return __awaiter(this, void 0, void 0, function* () {
             const discussionId = yield this.getDiscussionId(this.remindTitle);
+            // eslint-disable-next-line no-console
+            console.log(discussionId);
             if (discussionId) {
                 yield this.github.createDiscussionComment(discussionId, this.remindTemplate);
             }
@@ -408,6 +410,8 @@ class WeeklyUpdate {
     }
     getDiscussionId(title = this.config.title) {
         return __awaiter(this, void 0, void 0, function* () {
+            // eslint-disable-next-line no-console
+            console.log(title);
             const discussionId = yield this.github.findDiscussionNumberByTitle(this.repoOwner, this.repoName, title);
             return discussionId;
         });
