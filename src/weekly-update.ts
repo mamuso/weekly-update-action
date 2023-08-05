@@ -1,6 +1,5 @@
 import * as core from '@actions/core'
 import * as fs from 'fs'
-import {encode} from 'html-entities'
 import GitHub from './github'
 import DefaultConfig from './config'
 import type {config} from './types'
@@ -65,7 +64,6 @@ export default class WeeklyUpdate {
           '{{shortdate}}',
           shortPostOnDateStr
         )
-        this.postTemplate = encode(this.postTemplate, {mode: 'nonAsciiPrintableOnly', level: 'xml'})
         this.remindTemplate = this.readTemplateFile(this.config.remind_template)?.replace(
           '{{date}}',
           shortPreviousPostOnDateStr
@@ -74,7 +72,6 @@ export default class WeeklyUpdate {
           '{{shortdate}}',
           shortPreviousPostOnDateStr
         )
-        this.remindTemplate = encode(this.remindTemplate, {mode: 'nonAsciiPrintableOnly', level: 'xml'})
 
         /**
          * Determine the route that the action needs to take based on the day of the week and the configuration. The route will be one of the following:
