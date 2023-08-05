@@ -101,6 +101,8 @@ export default class GitHub {
   ): Promise<void> {
     if (title && body && categoryId) {
       const repoId = await this.getRepoId(repoOwner, repoName)
+      // eslint-disable-next-line no-console
+      console.log(body)
       const query = `
       mutation {
         createDiscussion(input: {
@@ -122,6 +124,8 @@ export default class GitHub {
    */
   async createDiscussionComment(discussionId: number | null, body: string | undefined): Promise<void> {
     if (discussionId && body) {
+      // eslint-disable-next-line no-console
+      console.log(body)
       const query = `
       mutation {
         addDiscussionComment(input: {

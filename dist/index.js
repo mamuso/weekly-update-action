@@ -137,6 +137,8 @@ class GitHub {
         return __awaiter(this, void 0, void 0, function* () {
             if (title && body && categoryId) {
                 const repoId = yield this.getRepoId(repoOwner, repoName);
+                // eslint-disable-next-line no-console
+                console.log(body);
                 const query = `
       mutation {
         createDiscussion(input: {
@@ -159,6 +161,8 @@ class GitHub {
     createDiscussionComment(discussionId, body) {
         return __awaiter(this, void 0, void 0, function* () {
             if (discussionId && body) {
+                // eslint-disable-next-line no-console
+                console.log(body);
                 const query = `
       mutation {
         addDiscussionComment(input: {
