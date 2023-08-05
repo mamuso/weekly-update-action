@@ -106,7 +106,7 @@ export default class GitHub {
       const query = `
       mutation {
         createDiscussion(input: {
-            repositoryId: "${repoId}", title: "${title}", body: "${body}", categoryId: "${categoryId}"
+            repositoryId: "${repoId}", title: "${title}", body: """${body}""", categoryId: "${categoryId}"
           }) {
           discussion {
             number
