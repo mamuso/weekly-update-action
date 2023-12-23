@@ -146,16 +146,11 @@ export default class GitHub {
       console.log('PRElabels', labels)
       if (labels) {
         console.log('labels', labels)
-        const labelIds = labels
-          ? await Promise.all(
-              labels.map(async (label: string) => {
-                const id = this.getLabelId(repoOwner, repoName, label)
-                if (id) {
-                  return id
-                }
-              })
-            )
+        let labelIds = labels
+          ? await Promise.all(labels.map(async (label: string) => this.getLabelId(repoOwner, repoName, label)))
           : null
+
+        labelIds = labelIds?.filter((labelId: string | null) => labelId !== null) ?? null
 
         console.log('labelIds', labelIds)
 

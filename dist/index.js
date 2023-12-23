@@ -164,6 +164,7 @@ class GitHub {
      * @returns {Promise<void>}
      */
     createDiscussion(repoOwner, repoName, title, body, labels, categoryId) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             if (title && body && categoryId) {
                 const repoId = yield this.getRepoId(repoOwner, repoName);
@@ -182,14 +183,10 @@ class GitHub {
                 console.log('PRElabels', labels);
                 if (labels) {
                     console.log('labels', labels);
-                    const labelIds = labels
-                        ? yield Promise.all(labels.map((label) => __awaiter(this, void 0, void 0, function* () {
-                            const id = this.getLabelId(repoOwner, repoName, label);
-                            if (id) {
-                                return id;
-                            }
-                        })))
+                    let labelIds = labels
+                        ? yield Promise.all(labels.map((label) => __awaiter(this, void 0, void 0, function* () { return this.getLabelId(repoOwner, repoName, label); })))
                         : null;
+                    labelIds = (_a = labelIds === null || labelIds === void 0 ? void 0 : labelIds.filter((labelId) => labelId !== null)) !== null && _a !== void 0 ? _a : null;
                     console.log('labelIds', labelIds);
                     if (labelIds) {
                         const discussionNumber = yield this.findDiscussionNumberByTitle(repoOwner, repoName, title);
