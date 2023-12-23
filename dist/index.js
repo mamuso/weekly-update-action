@@ -186,7 +186,7 @@ class GitHub {
                     let labelIds = labels
                         ? yield Promise.all(labels.map((label) => __awaiter(this, void 0, void 0, function* () { return this.getLabelId(repoOwner, repoName, label); })))
                         : null;
-                    labelIds = (_a = labelIds === null || labelIds === void 0 ? void 0 : labelIds.filter((labelId) => labelId !== null)) !== null && _a !== void 0 ? _a : null;
+                    labelIds = (_a = labelIds === null || labelIds === void 0 ? void 0 : labelIds.filter(Boolean)) !== null && _a !== void 0 ? _a : null;
                     console.log('labelIds', labelIds);
                     if (labelIds) {
                         const discussionNumber = yield this.findDiscussionNumberByTitle(repoOwner, repoName, title);

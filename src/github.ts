@@ -150,7 +150,7 @@ export default class GitHub {
           ? await Promise.all(labels.map(async (label: string) => this.getLabelId(repoOwner, repoName, label)))
           : null
 
-        labelIds = labelIds?.filter((labelId: string | null) => labelId !== null) ?? null
+        labelIds = labelIds?.filter(Boolean) ?? null
 
         console.log('labelIds', labelIds)
 
