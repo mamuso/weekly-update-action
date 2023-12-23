@@ -116,37 +116,6 @@ export default class GitHub {
   }
 
   /**
-   * Get or create label id
-   * @returns {Promise<string | null>} Label id
-   */
-
-  async getOrCreateLabelId(repoOwner: string, repoName: string, label: string | undefined): Promise<string | null> {
-    if (label) {
-      const labelId = await this.getLabelId(repoOwner, repoName, label)
-      if (labelId) {
-        return labelId
-      } else {
-        const repoId = await this.getRepoId(repoOwner, repoName)
-        const query = `
-        mutation {
-          createLabel(input: {
-              repositoryId: "${repoId}", name: "${label}", color: "ededed"
-            }) {
-            label {
-              id
-            }
-          }
-        }
-      `
-        const response: GraphQlQueryResponseData = await this.connection(query)
-        return response.createLabel.label.id
-      }
-    } else {
-      return null
-    }
-  }
-
-  /**
    * Create discussion
    * @returns {Promise<void>}
    */
@@ -177,7 +146,7 @@ export default class GitHub {
       if (labels) {
         console.log('labels', labels)
         const labelIds = labels
-          ? await Promise.all(labels.map(async (label: string) => this.getOrCreateLabelId(repoOwner, repoName, label)))
+          ? await Promise.all(labels.map(async (label: string) => this.getLabelId(repoOwner, repoName, label)))
           : null
 
         console.log('labelIds', labelIds)

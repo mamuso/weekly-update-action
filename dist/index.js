@@ -160,39 +160,6 @@ class GitHub {
         });
     }
     /**
-     * Get or create label id
-     * @returns {Promise<string | null>} Label id
-     */
-    getOrCreateLabelId(repoOwner, repoName, label) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (label) {
-                const labelId = yield this.getLabelId(repoOwner, repoName, label);
-                if (labelId) {
-                    return labelId;
-                }
-                else {
-                    const repoId = yield this.getRepoId(repoOwner, repoName);
-                    const query = `
-        mutation {
-          createLabel(input: {
-              repositoryId: "${repoId}", name: "${label}", color: "ededed"
-            }) {
-            label {
-              id
-            }
-          }
-        }
-      `;
-                    const response = yield this.connection(query);
-                    return response.createLabel.label.id;
-                }
-            }
-            else {
-                return null;
-            }
-        });
-    }
-    /**
      * Create discussion
      * @returns {Promise<void>}
      */
@@ -215,7 +182,7 @@ class GitHub {
                 if (labels) {
                     console.log('labels', labels);
                     const labelIds = labels
-                        ? yield Promise.all(labels.map((label) => __awaiter(this, void 0, void 0, function* () { return this.getOrCreateLabelId(repoOwner, repoName, label); })))
+                        ? yield Promise.all(labels.map((label) => __awaiter(this, void 0, void 0, function* () { return this.getLabelId(repoOwner, repoName, label); })))
                         : null;
                     console.log('labelIds', labelIds);
                     if (labelIds) {
