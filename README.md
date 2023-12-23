@@ -6,17 +6,28 @@ An action for creating a weekly GitHub discussion. It has the option of posting 
 
 These are the configurable options:
 
-- `post_on` - the day of the week to create the discussion (default: `Mon`)
-- `remind_on` - the day of the week to remind folks to update their progress (default: empty)
-- `advance_on` - the day of the week to create the discussion a few days ahead of the post day (default: empty)
-- `title` - the title of the discussion (default: `Weekly Update ({{date}})`)
-- `category` - the category of the discussion (default: `General`)
-- `repo` - the repository to create the discussion in (default: empty`)
-- `token` - the GitHub token or PAT that you want to use (default: empty)
-- `post_template` - the name of the markdown file to use as the template for the discussion post (default: `.github/weekly-post.md`)
-- `reminder_template` - the name of the markdown file to use as the template for the reminder reply to the post (default: `.github/weekly-reminder.md`)
+post_on: Day to create the discussion (Default: Mon).
+remind_on: Day to send a progress update reminder (Default: empty).
+advance_on: Day to post the discussion ahead of schedule (Default: empty).
+title: Discussion title (Default: Weekly Update (Default: Weekly Update ({{date}})).
+category: Discussion category (Default: General).
+repo: Repository for the discussion (Default: empty).
+token: GitHub token/PAT (Default: empty).
+post_template: Markdown file for discussion post (Default: .github/weekly-post.md).
+reminder_template: Markdown file for reminder reply (Default: .github/weekly-reminder.md).
 
-The action looks for discussions by title. You can use the `date` or `shortdate` variable in the title and templates, and the action will process and replace it:
+- `post_on` - Day to create the discussion (default: `Mon`)
+- `remind_on` - Day to send an update reminder (default: empty)
+- `advance_on` - Day to post the discussion ahead of schedule (default: empty)
+- `title` - Discussion title (default: `Weekly Update ({{date}})`)
+- `category` - Discussion category (default: `General`)
+- `repo` - Repository for the discussion (default: empty`)
+- `token` - GitHub token/PAT (default: empty)
+- `post_template` - Markdown file for discussion post (default: `.github/weekly-post.md`)
+- `reminder_template` - Markdown file for reminder reply (default: `.github/weekly-reminder.md`)
+- `lables` - List of labels. This is a multiline field. Labels should exist in the repository (default: empty)
+
+The action finds discussions by title. Use date or shortdate in titles/templates for automatic date processing.
 
 - `Team update - Week of {{date}}` will transform into `Team update - Week of January 2, 2023`.
 - `Team update - {{shortdate}}` will transform into `Team update - January 2023`.
@@ -171,3 +182,34 @@ jobs:
 ```
 
 ![Running a 'Monthly post'](https://user-images.githubusercontent.com/3992/211470297-2df440fa-bf2d-4268-99f1-d6264cc0c195.png)
+
+### Labeling discussions
+
+Using the labels input, you can assign labels to the discussion. Enter each label on a new line in this multiline field. Make sure the labels already exist in your repository. If they don't, the action will ignore them.
+
+```yaml
+name: Weekly Update
+
+on:
+  schedule:
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+
+jobs:
+  step:
+    name: Weekly Update
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: mamuso/weekly-update-action@main
+        with:
+          post_on: Mon
+          remind_on: Thu
+          title: Team update - Week of {{date}}
+          category: Show and tell
+          repo: ${{ github.repository }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          labels: |
+            weekly
+            😎 teamwork
+```

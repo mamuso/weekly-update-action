@@ -10,7 +10,8 @@ const actionConfig: config = {
   title: core.getInput('title'),
   post_template: core.getInput('post_template'),
   remind_template: core.getInput('remind_template'),
-  category: core.getInput('category')
+  category: core.getInput('category'),
+  labels: core.getMultilineInput('labels')
 }
 const weekly = new WeeklyUpdate(actionConfig)
 weekly.run()

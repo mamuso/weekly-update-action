@@ -15,6 +15,7 @@ export default class WeeklyUpdate {
   postTemplate: string | undefined
   remindTitle: string | undefined
   remindTemplate: string | undefined
+  labels: string[]
   github: GitHub
 
   constructor(actionConfig: config) {
@@ -23,6 +24,8 @@ export default class WeeklyUpdate {
      */
     this.config = new DefaultConfig().config
     Object.assign(this.config, actionConfig)
+
+    this.labels = this.config.labels ?? []
 
     this.token = core.getInput('token', {required: true})
     this.github = new GitHub(this.token)
@@ -124,6 +127,7 @@ export default class WeeklyUpdate {
           this.repoName,
           this.config.title,
           this.postTemplate,
+          this.labels,
           categoryId
         )
       } else {

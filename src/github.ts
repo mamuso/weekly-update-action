@@ -89,6 +89,31 @@ export default class GitHub {
   }
 
   /**
+   * Get label id
+   * @returns {Promise<string | null>} Label id
+   */
+  async getLabelId(repoOwner: string, repoName: string, label: string | undefined): Promise<string | null> {
+    if (label) {
+      const query = `
+      query {
+        repository(owner: "${repoOwner}", name: "${repoName}") {
+          labels(first: 100) {
+            nodes {
+              id
+              name
+            }
+          }
+        }
+      }
+    `
+      const response: GraphQlQueryResponseData = await this.connection(query)
+      return response.repository.labels.nodes.find((labelNode: {name: string}) => labelNode.name === label)?.id
+    } else {
+      return null
+    }
+  }
+
+  /**
    * Create discussion
    * @returns {Promise<void>}
    */
@@ -97,10 +122,12 @@ export default class GitHub {
     repoName: string,
     title: string | undefined,
     body: string | undefined,
+    labels: string[] | null,
     categoryId: number | null
   ): Promise<void> {
     if (title && body && categoryId) {
       const repoId = await this.getRepoId(repoOwner, repoName)
+
       const query = `
       mutation {
         createDiscussion(input: {
@@ -113,6 +140,30 @@ export default class GitHub {
       }
     `
       await this.connection(query)
+
+      if (labels) {
+        let labelIds = labels
+          ? await Promise.all(labels.map(async (label: string) => this.getLabelId(repoOwner, repoName, label)))
+          : null
+
+        labelIds = labelIds?.filter(Boolean) ?? null
+
+        if (labelIds) {
+          const discussionNumber = await this.findDiscussionNumberByTitle(repoOwner, repoName, title)
+          if (discussionNumber) {
+            const labelsQuery = `
+          mutation {
+            addLabelsToLabelable(input: {
+                labelableId: "${discussionNumber}", labelIds: ${JSON.stringify(labelIds)}
+              }) {
+              clientMutationId
+            }
+          }
+        `
+            await this.connection(labelsQuery)
+          }
+        }
+      }
     }
   }
 
