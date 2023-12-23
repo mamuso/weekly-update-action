@@ -172,16 +172,15 @@ export default class GitHub {
     `
       await this.connection(query)
 
-      const labelIds = labels
-        ? await Promise.all(labels.map((label: string) => this.getOrCreateLabelId(repoOwner, repoName, label)))
-        : null
+      if (labels) {
+        const labelIds = labels
+          ? await Promise.all(labels.map(async (label: string) => this.getOrCreateLabelId(repoOwner, repoName, label)))
+          : null
 
-      console.log(`These are labelIds= ${labelIds}`)
-
-      if (labelIds) {
-        const discussionNumber = await this.findDiscussionNumberByTitle(repoOwner, repoName, title)
-        if (discussionNumber) {
-          const query = `
+        if (labelIds) {
+          const discussionNumber = await this.findDiscussionNumberByTitle(repoOwner, repoName, title)
+          if (discussionNumber) {
+            const labelsQuery = `
           mutation {
             addLabelsToLabelable(input: {
                 labelableId: "${discussionNumber}", labelIds: ${JSON.stringify(labelIds)}
@@ -190,7 +189,8 @@ export default class GitHub {
             }
           }
         `
-          await this.connection(query)
+            await this.connection(labelsQuery)
+          }
         }
       }
     }

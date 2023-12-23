@@ -18,7 +18,7 @@ export default class defaultConfig {
       post_template: '.github/weekly-post.md',
       remind_template: '.github/weekly-reminder.md',
       category: 'General',
-      labels: ''
+      labels: []
     }
   }
 }

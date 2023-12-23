@@ -15,7 +15,7 @@ export default class WeeklyUpdate {
   postTemplate: string | undefined
   remindTitle: string | undefined
   remindTemplate: string | undefined
-  labels: string[] | undefined
+  labels: string[] | null = null
   github: GitHub
 
   constructor(actionConfig: config) {
