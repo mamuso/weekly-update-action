@@ -143,6 +143,7 @@ export default class GitHub {
     `
       await this.connection(query)
 
+      console.log('PRElabels', labels)
       if (labels) {
         console.log('labels', labels)
         const labelIds = labels

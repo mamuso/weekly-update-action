@@ -179,6 +179,7 @@ class GitHub {
       }
     `;
                 yield this.connection(query);
+                console.log('PRElabels', labels);
                 if (labels) {
                     console.log('labels', labels);
                     const labelIds = labels
