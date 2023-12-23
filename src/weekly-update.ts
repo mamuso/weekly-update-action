@@ -15,6 +15,7 @@ export default class WeeklyUpdate {
   postTemplate: string | undefined
   remindTitle: string | undefined
   remindTemplate: string | undefined
+  labels: string[] | undefined
   github: GitHub
 
   constructor(actionConfig: config) {
@@ -124,6 +125,7 @@ export default class WeeklyUpdate {
           this.repoName,
           this.config.title,
           this.postTemplate,
+          this.labels,
           categoryId
         )
       } else {

@@ -7,4 +7,5 @@ export interface config {
   remind_template?: string
   repo?: string | null
   category?: string
+  labels?: string[] | null
 }
