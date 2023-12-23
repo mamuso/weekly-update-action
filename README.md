@@ -25,7 +25,7 @@ reminder_template: Markdown file for reminder reply (Default: .github/weekly-rem
 - `token` - GitHub token/PAT (default: empty)
 - `post_template` - Markdown file for discussion post (default: `.github/weekly-post.md`)
 - `reminder_template` - Markdown file for reminder reply (default: `.github/weekly-reminder.md`)
-- `lables` - List of labels. This is a multiline field. Labels should exist in the repository (default: empty)
+- `labels` - List of labels. This is a multiline field. Labels should exist in the repository (default: empty)
 
 The action finds discussions by title. Use date or shortdate in titles/templates for automatic date processing.
 
