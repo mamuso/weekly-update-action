@@ -37,6 +37,7 @@ exports["default"] = defaultConfig;
 
 "use strict";
 
+/* eslint-disable no-console */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -212,9 +213,11 @@ class GitHub {
     `;
                 yield this.connection(query);
                 if (labels) {
+                    console.log('labels', labels);
                     const labelIds = labels
-                        ? yield Promise.all(labels.map((label) => this.getOrCreateLabelId(repoOwner, repoName, label)))
+                        ? yield Promise.all(labels.map((label) => __awaiter(this, void 0, void 0, function* () { return this.getOrCreateLabelId(repoOwner, repoName, label); })))
                         : null;
+                    console.log('labelIds', labelIds);
                     if (labelIds) {
                         const discussionNumber = yield this.findDiscussionNumberByTitle(repoOwner, repoName, title);
                         if (discussionNumber) {
@@ -360,12 +363,13 @@ const github_1 = __importDefault(__nccwpck_require__(5865));
 const config_1 = __importDefault(__nccwpck_require__(6816));
 class WeeklyUpdate {
     constructor(actionConfig) {
-        this.labels = null;
+        var _a;
         /**
          * Merge the default configuration with the user's configuration
          */
         this.config = new config_1.default().config;
         Object.assign(this.config, actionConfig);
+        this.labels = (_a = this.config.labels) !== null && _a !== void 0 ? _a : [];
         this.token = core.getInput('token', { required: true });
         this.github = new github_1.default(this.token);
         this.route = ''; // post, advance, remind
