@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 import {graphql} from '@octokit/graphql'
 import type {GraphQlQueryResponseData} from '@octokit/graphql'
 
@@ -143,16 +141,12 @@ export default class GitHub {
     `
       await this.connection(query)
 
-      console.log('PRElabels', labels)
       if (labels) {
-        console.log('labels', labels)
         let labelIds = labels
           ? await Promise.all(labels.map(async (label: string) => this.getLabelId(repoOwner, repoName, label)))
           : null
 
         labelIds = labelIds?.filter(Boolean) ?? null
-
-        console.log('labelIds', labelIds)
 
         if (labelIds) {
           const discussionNumber = await this.findDiscussionNumberByTitle(repoOwner, repoName, title)

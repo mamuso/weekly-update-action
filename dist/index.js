@@ -37,7 +37,6 @@ exports["default"] = defaultConfig;
 
 "use strict";
 
-/* eslint-disable no-console */
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -180,14 +179,11 @@ class GitHub {
       }
     `;
                 yield this.connection(query);
-                console.log('PRElabels', labels);
                 if (labels) {
-                    console.log('labels', labels);
                     let labelIds = labels
                         ? yield Promise.all(labels.map((label) => __awaiter(this, void 0, void 0, function* () { return this.getLabelId(repoOwner, repoName, label); })))
                         : null;
                     labelIds = (_a = labelIds === null || labelIds === void 0 ? void 0 : labelIds.filter(Boolean)) !== null && _a !== void 0 ? _a : null;
-                    console.log('labelIds', labelIds);
                     if (labelIds) {
                         const discussionNumber = yield this.findDiscussionNumberByTitle(repoOwner, repoName, title);
                         if (discussionNumber) {
