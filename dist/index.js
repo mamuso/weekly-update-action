@@ -185,7 +185,7 @@ class GitHub {
                     const labelIds = labels
                         ? yield Promise.all(labels.map((label) => __awaiter(this, void 0, void 0, function* () {
                             const id = this.getLabelId(repoOwner, repoName, label);
-                            if (id != null) {
+                            if (id) {
                                 return id;
                             }
                         })))
