@@ -159,12 +159,6 @@ export default class GitHub {
     if (title && body && categoryId) {
       const repoId = await this.getRepoId(repoOwner, repoName)
 
-      const labelIds = labels
-        ? await Promise.all(labels.map((label: string) => this.getOrCreateLabelId(repoOwner, repoName, label)))
-        : null
-
-      console.log(`These are labelIds= ${labelIds}`)
-
       const query = `
       mutation {
         createDiscussion(input: {
@@ -177,6 +171,28 @@ export default class GitHub {
       }
     `
       await this.connection(query)
+
+      const labelIds = labels
+        ? await Promise.all(labels.map((label: string) => this.getOrCreateLabelId(repoOwner, repoName, label)))
+        : null
+
+      console.log(`These are labelIds= ${labelIds}`)
+
+      if (labelIds) {
+        const discussionNumber = await this.findDiscussionNumberByTitle(repoOwner, repoName, title)
+        if (discussionNumber) {
+          const query = `
+          mutation {
+            addLabelsToLabelable(input: {
+                labelableId: "${discussionNumber}", labelIds: ${JSON.stringify(labelIds)}
+              }) {
+              clientMutationId
+            }
+          }
+        `
+          await this.connection(query)
+        }
+      }
     }
   }
 
