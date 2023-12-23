@@ -183,7 +183,12 @@ class GitHub {
                 if (labels) {
                     console.log('labels', labels);
                     const labelIds = labels
-                        ? yield Promise.all(labels.map((label) => __awaiter(this, void 0, void 0, function* () { return this.getLabelId(repoOwner, repoName, label); })))
+                        ? yield Promise.all(labels.map((label) => __awaiter(this, void 0, void 0, function* () {
+                            const id = this.getLabelId(repoOwner, repoName, label);
+                            if (id != null) {
+                                return id;
+                            }
+                        })))
                         : null;
                     console.log('labelIds', labelIds);
                     if (labelIds) {

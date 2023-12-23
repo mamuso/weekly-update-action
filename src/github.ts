@@ -147,7 +147,14 @@ export default class GitHub {
       if (labels) {
         console.log('labels', labels)
         const labelIds = labels
-          ? await Promise.all(labels.map(async (label: string) => this.getLabelId(repoOwner, repoName, label)))
+          ? await Promise.all(
+              labels.map(async (label: string) => {
+                const id = this.getLabelId(repoOwner, repoName, label)
+                if (id != null) {
+                  return id
+                }
+              })
+            )
           : null
 
         console.log('labelIds', labelIds)
