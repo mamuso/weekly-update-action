@@ -56,7 +56,7 @@ jobs:
     name: Weekly Update
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: mamuso/weekly-update-action@main
         with:
           post_on: Mon
@@ -95,7 +95,7 @@ jobs:
     name: Monday Minutes
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: mamuso/weekly-update-action@main
         with:
           post_on: Mon
@@ -134,7 +134,7 @@ jobs:
           - {title: Design Systems, path: design-systems}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: mamuso/weekly-update-action@main
         with:
           post_on: Mon
@@ -170,7 +170,7 @@ jobs:
     name: Monthly Business Review Agenda
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: mamuso/weekly-update-action@main
         with:
           post_on: Mon
@@ -200,7 +200,7 @@ jobs:
     name: Weekly Update
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: mamuso/weekly-update-action@main
         with:
           post_on: Mon
